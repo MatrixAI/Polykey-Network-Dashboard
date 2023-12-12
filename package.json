@@ -1,0 +1,56 @@
+{
+  "name": "polykey-network-dashboard",
+  "private": true,
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "scripts": {
+    "lint": "eslint '{src,api,pages,blog,scripts}/**/*.{js,ts,jsx,tsx,json}' 'docusaurus.config.ts'",
+    "lintfix": "eslint '{src,api,pages,blog,scripts}/**/*.{js,ts,jsx,tsx,json}' 'docusaurus.config.ts' --fix",
+    "start": "docusaurus start",
+    "swizzle": "docusaurus swizzle",
+    "build": "docusaurus build --out-dir=./public",
+    "deploy": "node ./scripts/deploy.js"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20230228.0",
+    "@docusaurus/core": "^3.0.0",
+    "@docusaurus/module-type-aliases": "^3.0.0",
+    "@docusaurus/preset-classic": "^3.0.0",
+    "@docusaurus/theme-common": "^3.0.0",
+    "@mdx-js/react": "^3.0.0",
+    "@tsconfig/docusaurus": "^1.0.5",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
+    "autoprefixer": "^10.4.16",
+    "clsx": "^1.2.1",
+    "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^5.0.0-alpha.2",
+    "postcss": "^8.4.31",
+    "prettier": "^3.0.0",
+    "prism-react-renderer": "^2.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5.1.6",
+    "unist-util-visit": "^5.0.0",
+    "wrangler": "^3.17.1"
+  },
+  "engines": {
+    "node": ">=18.0"
+  },
+  "dependencies": {
+    "@docusaurus/plugin-client-redirects": "^3.0.1"
+  }
+}

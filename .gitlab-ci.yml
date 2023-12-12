@@ -1,0 +1,85 @@
+workflow:
+  rules:
+    # Disable merge request pipelines
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+    - when: always
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  GH_PROJECT_PATH: "MatrixAI/${CI_PROJECT_NAME}"
+  GH_PROJECT_URL: "https://${GITHUB_TOKEN}@github.com/${GH_PROJECT_PATH}.git"
+  # Cache .npm
+  NPM_CONFIG_CACHE: "${CI_PROJECT_DIR}/tmp/npm"
+  # Prefer offline node module installation
+  NPM_CONFIG_PREFER_OFFLINE: "true"
+
+default:
+  interruptible: true
+  before_script:
+    - mkdir -p "$CI_PROJECT_DIR/tmp"
+
+# Cached directories shared between jobs & pipelines per-branch per-runner
+cache:
+  key: $CI_COMMIT_REF_SLUG
+  # Preserve cache even if job fails
+  when: 'always'
+  paths:
+    - ./tmp/npm/
+    - ./.docusaurus
+
+stages:
+  - check       # Linting, unit tests
+  - build       # Cross-platform library compilation, unit tests
+  - release     # Cross-platform distribution and deployment
+
+image: registry.gitlab.com/matrixai/engineering/maintenance/gitlab-runner
+
+check:lint:
+  stage: check
+  needs: []
+  script:
+    - echo 'Perform linting'
+  rules:
+    # Runs on master commits
+    - if: $CI_COMMIT_BRANCH == 'master'
+
+build:site:
+  stage: build
+  needs: []
+  script:
+    - echo 'Perform static site generation'
+    - >
+      nix-shell --arg ci true --run $'
+      npm run build;
+      '
+  artifacts:
+    when: always
+    paths:
+      - ./public
+  rules:
+    # Runs on master commits
+    - if: $CI_COMMIT_BRANCH == 'master'
+
+release:deployment:
+  stage: release
+  needs:
+    - check:lint
+    - build:site
+  # Don't interrupt deploying job
+  interruptible: false
+  # Requires mutual exclusion
+  resource_group: release:deployment
+  environment:
+    name: 'production'
+    deployment_tier: 'production'
+    url: 'https://polykey.com'
+  script:
+    - echo 'Perform service deployment for production'
+    - >
+      nix-shell --arg ci true --run $'
+      npm run deploy -- --env production;
+      '
+  rules:
+    # Runs on master commits
+    - if: $CI_COMMIT_BRANCH == 'master'
