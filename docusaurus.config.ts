@@ -41,32 +41,7 @@ const themeConfig: UserThemeConfig = {
         autoAddBaseUrl: false,
         target: '_self',
         position: 'right',
-      },
-      {
-        label: 'Download',
-        to: 'pathname:///download',
-        autoAddBaseUrl: false,
-        target: '_self',
-        position: 'right',
-      },
-      {
-        label: 'Blog',
-        to: 'pathname:///blog',
-        autoAddBaseUrl: false,
-        target: '_self',
-        position: 'right',
-      },
-      {
-        label: 'Docs',
-        href: '/docs',
-        autoAddBaseUrl: false,
-        position: 'right',
-      },
-      {
-        label: 'GitHub',
-        to: 'https://github.com/MatrixAI/Polykey',
-        position: 'right',
-      },
+      }
     ],
   },
   footer: {
@@ -83,19 +58,19 @@ const themeConfig: UserThemeConfig = {
         items: [
           {
             label: 'Download',
-            to: 'pathname:///download',
+            to: 'https://polykey.com/download',
             autoAddBaseUrl: false,
             target: '_self',
           },
           {
             label: 'Blog',
-            to: 'pathname:///blog',
+            to: 'https://polykey.com/blog',
             autoAddBaseUrl: false,
             target: '_self',
           },
           {
             label: 'Docs',
-            href: '/docs',
+            to: 'https://polykey.com/docs',
             autoAddBaseUrl: false,
           },
           {
@@ -159,13 +134,13 @@ const themeConfig: UserThemeConfig = {
           },
           {
             label: 'Terms of Service',
-            to: 'pathname:///terms-of-service',
+            to: 'https://polykey.com/terms-of-service',
             autoAddBaseUrl: false,
             target: '_self',
           },
           {
             label: 'Privacy Policy',
-            to: 'pathname:///privacy-policy',
+            to: 'https://polykey.com/privacy-policy',
             autoAddBaseUrl: false,
             target: '_self',
           },
