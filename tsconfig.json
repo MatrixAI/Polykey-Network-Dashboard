@@ -1,0 +1,40 @@
+// TypeScript configuration is not used for compilation
+// It is only used for IDE checking and auto-completion
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "jsx": "react",
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "module": "CommonJS",
+    "target": "ES2021",
+    "lib": ["ES2021", "dom"],
+    "types": [
+      "node",
+      "@docusaurus/module-type-aliases",
+      "@docusaurus/theme-classic",
+      "@cloudflare/workers-types"
+    ],
+    "noEmit": true,
+    "paths": {
+      "@site/*": ["./*"]
+    },
+    "skipLibCheck": true
+  },
+  "include": [
+    "./src/**/*",
+    "./src/pages/**/*",
+    "./src/blog/**/*",
+    "./api/**/*",
+    "./scripts/**/*",
+    "./docusaurus.config.ts",
+    "./worker.ts"
+  ]
+}
+

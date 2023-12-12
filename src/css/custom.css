@@ -1,0 +1,266 @@
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/static/fonts/OpenSans-Regular-webfont.eot');
+  src: url('/static/fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+  url('/static/fonts/OpenSans-Regular-webfont.woff') format('woff'),
+  url('/static/fonts/OpenSans-Regular-webfont.ttf') format('truetype'),
+  url('/static/fonts/OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/static/fonts/OpenSans-Semibold-webfont.eot');
+  src: url('/static/fonts/OpenSans-Semibold-webfont.eot?#iefix') format('embedded-opentype'),
+  url('/static/fonts/OpenSans-Semibold-webfont.woff') format('woff'),
+  url('/static/fonts/OpenSans-Semibold-webfont.ttf') format('truetype'),
+  url('/static/fonts/OpenSans-Semibold-webfont.svg#open_sanssemibold') format('svg');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/static/fonts/OpenSans-Light-webfont.eot');
+  src: url('/static/fonts/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'),
+  url('/static/fonts/OpenSans-Light-webfont.woff') format('woff'),
+  url('/static/fonts/OpenSans-Light-webfont.ttf') format('truetype'),
+  url('/static/fonts/OpenSans-Light-webfont.svg#open_sanslight') format('svg');
+  font-weight: 300;
+  font-style: normal;
+}
+
+.wrapper{
+  max-width: 100% !important;
+  overflow: hidden !important;
+  width: 100% !important;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ifm-font-family-base: 'Open Sans', sans-serif;
+
+  --ifm-color-primary: #289295;
+  --ifm-navbar-link-hover-color: #fff;
+
+  --ifm-navbar-link-color: #fff;
+  --ifm-footer-background-color: #000;
+}
+
+/**
+ * Nav Bar
+ */
+.navbar {
+  background: #0e0e0e;
+  height: 4.5em;
+}
+
+.navbar__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.navbar__logo {
+  height: 3em;
+}
+
+.navbar__items {
+  display: flex;
+  position: relative;
+}
+
+@media (max-width: 1000px) {
+  .navbar__items {
+    flex-direction: row-reverse;
+  }
+}
+
+.navbar__items > .navbar__brand {
+  position: absolute;
+  left: 0;
+}
+
+.navbar__items--right {
+  font-size: 0.9em;
+}
+
+.navbar__toggle {
+  color: #fff;
+}
+
+#email-form {
+  height: 2.5em;
+}
+
+@media (max-width: 1000px) {
+  #email-form {
+    display: none;
+  }
+}
+
+/**
+ * Sidebar
+ */
+.navbar-sidebar .navbar__logo img {
+  display: block;
+  box-sizing: border-box;
+  padding-left: 200px;
+  background: url('/images/polykey-logotype-dark-dark.svg') no-repeat left;
+  background-size: 70%;
+  width: 160px;
+  height: 40px;
+}
+
+.navbar-sidebar__items .navbar-sidebar__item:nth-child(2) {
+  display: none;
+}
+
+.navbar-sidebar__items .navbar-sidebar__item:nth-child(1) {
+  width: 100%;
+}
+
+.navbar-github-link {
+  background-image: url('/images/icon-github-light.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  text-indent: -9999px;
+  width: 2.5em;
+  height: 2.5em;
+  margin-left: 1em;
+}
+
+/* Remove the external link icon */
+.navbar-sidebar .menu__list-item svg[class^="iconExternalLink"] {
+  display: none;
+}
+
+/**
+ * Footer
+ */
+.footer {
+  background: #000;
+  /*height: 6em;*/
+}
+
+.footer .container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.footer .row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+}
+
+.footer__col{
+  max-width: 95%;
+}
+
+.footer .slogan{
+  justify-self: center;
+  text-align: center;
+}
+
+.footer .footer__links{
+  display: flex;
+  flex-direction: row;
+}
+
+/**
+ * Homepage
+ */
+.section {
+  padding: 2em 0 2em 2em;
+}
+.widthHandleWrapper{
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+.section__title {
+  text-align: center;
+  align-self: center;
+  font-size: 2.7em;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  line-height: 120%;
+  color: #1f211b;
+}
+.section__title_1{
+  font-size: 2em;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-align: left;
+  line-height: 1.5em;
+  color: #FFFFFF;
+}
+
+
+.section__title_2 {
+  font-size: 2.7em;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  line-height: 120%;
+}
+
+
+.section__title_3{
+  font-size: 1.5em;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-align: left;
+  line-height: 3.5em;
+  color: #FFFFFF;
+}
+
+.section__main{
+  font-size: 1.35em;
+  font-weight: 400;
+  line-height: 1.5em;
+}
+
+.section__main_2{
+  color: #ffffff;
+  font-size: 1em;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-align: left;
+  line-height: 3.5em;
+  margin-top: -0.055vh;
+}
+
+.section__main_link{
+  font-size: 1.5em;
+  font-weight: 400;
+  line-height: normal;
+  color: #FFFFFF;
+  margin: 5%;
+}
+
+.section__main_bold{
+  font-size: 1.35em;
+  font-weight: 600;
+  line-height: normal;
+}
+
+
+@media (max-width: 1000px) {
+  .section__title {
+    font-size: 1.8em;
+  }
+
+  .responsive-flex{
+    flex-direction: column;
+    padding-left: 5%;
+  }
+}
+
+

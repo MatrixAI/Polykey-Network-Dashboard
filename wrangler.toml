@@ -1,0 +1,20 @@
+name = "polykey-network-dashboard-dev"
+main = "worker.ts"
+compatibility_date = "2023-03-06"
+usage_model = "bundled"
+workers_dev = true
+send_metrics = false
+[site]
+  bucket = "./public"
+routes = [
+  "testnet.polykey.com",
+  "testnet.polykey.com/*",
+]
+
+[env.production]
+  name = "polykey-network-dashboard"
+  routes = [
+    "mainnet.polykey.com",
+    "mainnet.polykey.com/*",
+  ]
+  workers_dev = false
