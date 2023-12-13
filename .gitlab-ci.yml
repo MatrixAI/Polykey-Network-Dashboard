@@ -51,9 +51,11 @@ check:lint:
     - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != 'master'
       when: manual
 
-build:site:
+build:integration:
   stage: build
   needs: []
+  variables:
+    URL: 'https://testnet.polykey.com'
   script:
     - echo 'Perform static site generation'
     - >
@@ -66,13 +68,32 @@ build:site:
       - ./public
   rules:
         # Runs on master and staging commits
-    - if: $CI_COMMIT_BRANCH =~ /^(?:master|staging)$/
+    - if: $CI_COMMIT_BRANCH == 'staging'
+
+build:release:
+  stage: build
+  needs: []
+  variables:
+    URL: 'https://mainnet.polykey.com'
+  script:
+    - echo 'Perform static site generation'
+    - >
+      nix-shell --arg ci true --run $'
+      npm run build;
+      '
+  artifacts:
+    when: always
+    paths:
+      - ./public
+  rules:
+        # Runs on master and staging commits
+    - if: $CI_COMMIT_BRANCH =~ 'master'
 
 integration:deployment:
   stage: integration
   needs:
     - check:lint
-    - build:site
+    - build:integration
   # Don't interrupt deploying job
   interruptible: false
   # Requires mutual exclusion
@@ -94,7 +115,7 @@ integration:deployment:
 release:deployment:
   stage: release
   needs:
-    - build:site
+    - build:release
   # Don't interrupt deploying job
   interruptible: false
   # Requires mutual exclusion
