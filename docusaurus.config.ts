@@ -41,7 +41,7 @@ const themeConfig: UserThemeConfig = {
         autoAddBaseUrl: false,
         target: '_self',
         position: 'right',
-      }
+      },
     ],
   },
   footer: {
