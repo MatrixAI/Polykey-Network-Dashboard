@@ -165,7 +165,7 @@ const config: Config = {
   onBrokenMarkdownLinks: 'warn',
   // Generate `index.html` for each markdown file for pretty URLs
   trailingSlash: undefined,
-  favicon: 'images/polykey-favicon.png',
+  favicon: 'images/polykey-favicon-dark.png',
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
