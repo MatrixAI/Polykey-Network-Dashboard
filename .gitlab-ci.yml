@@ -125,7 +125,7 @@ integration:deployment:
   # Requires mutual exclusion
   resource_group: release:deployment
   environment:
-    name: 'staging'
+    name: 'preview'
     deployment_tier: 'staging'
     url: 'https://testnet.polykey.com'
   script:
