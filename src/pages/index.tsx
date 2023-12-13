@@ -4,7 +4,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import NodeList from '../components/NodeList';
 import Map from '../components/Map';
-import SeednodeList from '../components/NodeList';
+import SeednodeList from '../components/SeednodeList';
 
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
@@ -15,21 +15,18 @@ export default function Home(): JSX.Element {
     | undefined
   >();
   const [seednodes, setSeednodes] = React.useState<{ [nodeId: string]: any }>();
-
   React.useEffect(() => {
-    if (typeof globalThis.window !== 'undefined') {
-      // Last 7 days
-      void fetch(
-        `${siteConfig.url}/api/nodes/geo?seek=${
-          Date.now() - 1000 * 60 * 60 * 24 * 7
-        }`,
-      ).then(async (data) => {
-        setNodesGeo(await data.json());
-      });
-      void fetch(`${siteConfig.url}/api/seednodes`).then(async (data) => {
-        setSeednodes(await data.json());
-      });
-    }
+    // Last 7 days
+    void fetch(
+      `${siteConfig.url}/api/nodes/geo?seek=${
+        Date.now() - 1000 * 60 * 60 * 24 * 7
+      }`,
+    ).then(async (data) => {
+      setNodesGeo(await data.json());
+    });
+    void fetch(`${siteConfig.url}/api/seednodes`).then(async (data) => {
+      setSeednodes(await data.json());
+    });
   }, []);
 
   return (
@@ -47,7 +44,7 @@ export default function Home(): JSX.Element {
         </div>
         <div className="max-w-2xl mx-auto space-y-3 p-3">
           <h1 className="text-2xl text-center">Seednodes:</h1>
-          {seednodes != null ? <SeednodeList nodes={seednodes} /> : <></>}
+          {seednodes != null ? <SeednodeList seedNodes={seednodes} /> : <></>}
           <h1 className="text-2xl text-center">Nodes:</h1>
           {nodesGeo != null ? <NodeList nodes={nodesGeo} /> : <></>}
         </div>
