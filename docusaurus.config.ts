@@ -159,7 +159,7 @@ const themeConfig: UserThemeConfig = {
 const config: Config = {
   title: 'Polykey Network Dashboard',
   tagline: 'View Polykey Network Activity',
-  url: 'https://testnet.polykey.com',
+  url: process.env.URL ?? 'https://testnet.polykey.com',
   baseUrl: '/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
