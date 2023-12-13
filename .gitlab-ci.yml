@@ -31,6 +31,7 @@ cache:
 stages:
   - check       # Linting, unit tests
   - build       # Cross-platform library compilation, unit tests
+  - integration # Cross-platform application bundling, integration tests, and pre-release
   - release     # Cross-platform distribution and deployment
 
 image: registry.gitlab.com/matrixai/engineering/maintenance/gitlab-runner
@@ -39,10 +40,16 @@ check:lint:
   stage: check
   needs: []
   script:
-    - echo 'Perform linting'
+    - >
+      nix-shell --arg ci true --run $'
+      npm run lint;
+      '
   rules:
-    # Runs on master commits
-    - if: $CI_COMMIT_BRANCH == 'master'
+    # Runs on staging and feature commits
+    - if: $CI_COMMIT_BRANCH =~ /^(?:feature.*|staging)$/
+    # Manually run on commits other than master
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != 'master'
+      when: manual
 
 build:site:
   stage: build
@@ -58,11 +65,11 @@ build:site:
     paths:
       - ./public
   rules:
-    # Runs on master commits
-    - if: $CI_COMMIT_BRANCH == 'master'
+        # Runs on master and staging commits
+    - if: $CI_COMMIT_BRANCH =~ /^(?:master|staging)$/
 
-release:deployment:
-  stage: release
+integration:deployment:
+  stage: integration
   needs:
     - check:lint
     - build:site
@@ -71,9 +78,31 @@ release:deployment:
   # Requires mutual exclusion
   resource_group: release:deployment
   environment:
+    name: 'staging'
+    deployment_tier: 'staging'
+    url: 'https://testnet.polykey.com'
+  script:
+    - echo 'Perform service deployment for staging'
+    - >
+      nix-shell --arg ci true --run $'
+      npm run deploy;
+      '
+  rules:
+    # Runs on master commits
+    - if: $CI_COMMIT_BRANCH == 'staging'
+
+release:deployment:
+  stage: release
+  needs:
+    - build:site
+  # Don't interrupt deploying job
+  interruptible: false
+  # Requires mutual exclusion
+  resource_group: release:deployment
+  environment:
     name: 'production'
     deployment_tier: 'production'
-    url: 'https://polykey.com'
+    url: 'https://mainnet.polykey.com'
   script:
     - echo 'Perform service deployment for production'
     - >
