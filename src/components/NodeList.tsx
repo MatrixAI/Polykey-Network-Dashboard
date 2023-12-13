@@ -13,7 +13,7 @@ const SeednodeList = React.forwardRef<
         Object.keys(nodes).map((nodeId) => (
           <div key={nodeId} className="bg-[#E4F6F2] rounded-2xl p-3 flex-1">
             <span className="font-semibold">Node ID:</span>
-            <div className="overflow-x-auto">{nodeId}</div>
+            <div className="overflow-x-auto break-normal">{nodeId}</div>
           </div>
         ))
       ) : (
