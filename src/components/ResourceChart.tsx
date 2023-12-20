@@ -32,6 +32,7 @@ const registerList = [
 
 function ResourceChart({
   data,
+  title,
   ...props
 }: {
   data: {
@@ -40,6 +41,7 @@ function ResourceChart({
       values: number[];
     };
   };
+  title?: string;
 } & React.HTMLAttributes<HTMLCanvasElement>) {
   const [isRegistered, setIsRegistered] = React.useState(false);
   React.useEffect(() => {
@@ -53,6 +55,7 @@ function ResourceChart({
   const timestamps = Object.values(data).at(0)?.timestamps ?? [];
   return isRegistered ? (
     <Line
+      title={title}
       datasetIdKey="id"
       data={{
         labels: timestamps,
@@ -75,10 +78,14 @@ function ResourceChart({
           },
         },
         plugins: {
+          title: {
+            display: title != null,
+            text: title,
+          },
           tooltip: {
             callbacks: {
               label: (item) => {
-                return item.formattedValue + '% Usage';
+                return item.formattedValue + '%';
               },
             },
           },
@@ -113,6 +120,7 @@ function ResourceChart({
           },
         },
       }}
+      height={200}
       {...props}
     />
   ) : (

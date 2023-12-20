@@ -3,10 +3,9 @@ import * as React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import { useQuery } from '@tanstack/react-query';
-import NodeList from '../components/NodeList';
 import Map from '../components/Map';
-import SeednodeList from '../components/SeednodeList';
 import ResourceChart from '../components/ResourceChart';
+import NodeCard from '../components/NodeCard';
 
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
@@ -37,7 +36,6 @@ export default function Home(): JSX.Element {
       ),
     refetchInterval: 60 * 1000,
   });
-
   const resourceMemoryQuery = useQuery<{
     [nodeId: string]: { values: Array<number>; timestamps: Array<number> };
   }>({
@@ -62,30 +60,40 @@ export default function Home(): JSX.Element {
             </div>
           </div>
         </div>
-        <div className="max-w-2xl mx-auto space-y-3 p-3">
-          <h1 className="text-2xl text-center">Seednodes:</h1>
-          {seedNodesQuery.data != null ? (
-            <SeednodeList seedNodes={seedNodesQuery.data} />
-          ) : (
-            <></>
-          )}
-          <h1 className="text-2xl text-center">Seednodes Resources:</h1>
-          {resourceCpuQuery.data != null ? (
-            <ResourceChart data={resourceCpuQuery.data} />
-          ) : (
-            <></>
-          )}
-          {resourceMemoryQuery.data != null ? (
-            <ResourceChart data={resourceMemoryQuery.data} />
-          ) : (
-            <></>
-          )}
-          <h1 className="text-2xl text-center">Nodes:</h1>
-          {nodesGeoQuery.data != null ? (
-            <NodeList nodes={nodesGeoQuery.data} />
-          ) : (
-            <></>
-          )}
+        <div className="max-w-6xl mx-auto p-3 space-y-3">
+          <h1 className="text-2xl text-center">Seed Nodes</h1>
+          <div className="flex flex-wrap justify-center gap-3">
+            {seedNodesQuery.data != null ? (
+              Object.entries(seedNodesQuery.data).map(([nodeId, data]) => (
+                <NodeCard
+                  className="flex-grow-[0.5] flex-shrink min-w-0"
+                  nodeId={nodeId}
+                  remoteInfo={data}
+                />
+              ))
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className="w-full">
+            <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
+              {resourceCpuQuery.data != null ? (
+                <ResourceChart title="CPU Usage" data={resourceCpuQuery.data} />
+              ) : (
+                <></>
+              )}
+            </div>
+            <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
+              {resourceMemoryQuery.data != null ? (
+                <ResourceChart
+                  title="Memory Usage"
+                  data={resourceMemoryQuery.data}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </Layout>
