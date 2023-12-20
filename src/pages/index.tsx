@@ -78,7 +78,8 @@ export default function Home(): JSX.Element {
           </div>
           <BrowserOnly>
             {() => {
-              const ResourceChart: typeof ResourceChartType = require('../components/ResourceChart').default;
+              const ResourceChart: typeof ResourceChartType =
+                require('../components/ResourceChart').default;
               return (
                 <div className="w-full">
                   <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
