@@ -1,12 +1,11 @@
 import type { IpGeo } from '../types';
-import type ResourceChartType from '../components/ResourceChart';
 import * as React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import { useQuery } from '@tanstack/react-query';
-import BrowserOnly from '@docusaurus/BrowserOnly';
 import Map from '../components/Map';
 import NodeCard from '../components/NodeCard';
+import ResourceChart from '../components/ResourceChart';
 
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
@@ -76,36 +75,25 @@ export default function Home(): JSX.Element {
               <></>
             )}
           </div>
-          <BrowserOnly>
-            {() => {
-              const ResourceChart: typeof ResourceChartType =
-                require('../components/ResourceChart').default;
-              return (
-                <div className="w-full">
-                  <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
-                    {resourceCpuQuery.data != null ? (
-                      <ResourceChart
-                        title="CPU Usage"
-                        data={resourceCpuQuery.data}
-                      />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                  <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
-                    {resourceMemoryQuery.data != null ? (
-                      <ResourceChart
-                        title="Memory Usage"
-                        data={resourceMemoryQuery.data}
-                      />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                </div>
-              );
-            }}
-          </BrowserOnly>
+          <div className="w-full">
+            <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
+              {resourceCpuQuery.data != null ? (
+                <ResourceChart title="CPU Usage" data={resourceCpuQuery.data} />
+              ) : (
+                <></>
+              )}
+            </div>
+            <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
+              {resourceMemoryQuery.data != null ? (
+                <ResourceChart
+                  title="Memory Usage"
+                  data={resourceMemoryQuery.data}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </Layout>

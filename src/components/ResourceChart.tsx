@@ -1,34 +1,5 @@
 import * as React from 'react';
-import 'chartjs-adapter-date-fns';
 import { Line } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  TimeScale,
-  TimeSeriesScale,
-  Colors,
-} from 'chart.js';
-import zoomPlugin from 'chartjs-plugin-zoom';
-
-const registerList = [
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  TimeScale,
-  TimeSeriesScale,
-  Title,
-  Tooltip,
-  Legend,
-  Colors,
-  zoomPlugin,
-];
 
 function ResourceChart({
   data,
@@ -45,11 +16,32 @@ function ResourceChart({
 } & React.HTMLAttributes<HTMLCanvasElement>) {
   const [isRegistered, setIsRegistered] = React.useState(false);
   React.useEffect(() => {
-    ChartJS.register(...registerList);
-    setIsRegistered(true);
+    const registerList: Array<any> = [];
+    void (async () => {
+      const chartJs = await import('chart.js');
+      const zoomPlugin = (await import('chartjs-plugin-zoom')).default;
+      await import('chartjs-adapter-date-fns');
+      registerList.push(
+        chartJs.CategoryScale,
+        chartJs.LinearScale,
+        chartJs.PointElement,
+        chartJs.LineElement,
+        chartJs.Title,
+        chartJs.Tooltip,
+        chartJs.Legend,
+        chartJs.TimeScale,
+        chartJs.TimeSeriesScale,
+        chartJs.Colors,
+        zoomPlugin,
+      );
+      chartJs.Chart.register(...registerList);
+      setIsRegistered(true);
+    })();
     return () => {
-      setIsRegistered(false);
-      ChartJS.unregister(...registerList);
+      void import('chart.js').then((chartJs) => {
+        chartJs.Chart.unregister(...registerList);
+        setIsRegistered(false);
+      });
     };
   }, []);
   const timestamps = Object.values(data).at(0)?.timestamps ?? [];
