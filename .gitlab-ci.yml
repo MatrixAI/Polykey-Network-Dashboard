@@ -138,6 +138,41 @@ integration:deployment:
     # Runs on master commits
     - if: $CI_COMMIT_BRANCH == 'staging'
 
+integration:merge:
+  stage: integration
+  needs:
+    - build:merge
+    - job: build:integration
+      optional: true
+    # - job: integration:windows
+    #   optional: true
+    # - job: integration:macos
+    #   optional: true
+  # Requires mutual exclusion
+  resource_group: integration:merge
+  allow_failure: true
+  variables:
+    # Ensure that CI/CD is fetching all commits
+    # this is necessary to checkout origin/master
+    # and to also merge origin/staging
+    GIT_DEPTH: 0
+  script:
+    - >
+      nix-shell --arg ci true --run $'
+      printf "Pipeline Succeeded on ${CI_PIPELINE_ID} for ${CI_COMMIT_SHA}\n\n${CI_PIPELINE_URL}" \
+      | gh pr comment staging \
+        --body-file - \
+        --repo "$GH_PROJECT_PATH";
+      '
+    - git remote add upstream "$GH_PROJECT_URL"
+    - git checkout origin/master
+    # Merge up to the current commit (not the latest commit)
+    - git merge --ff-only "$CI_COMMIT_SHA"
+    - git push upstream HEAD:master
+  rules:
+    # Runs on staging commits
+    - if: $CI_COMMIT_BRANCH == 'staging'
+
 release:deployment:
   stage: release
   needs:
