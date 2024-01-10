@@ -4,7 +4,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import { useQuery } from '@tanstack/react-query';
 import Map from '../components/Map';
-import NodeCard from '../components/NodeCard';
+import SeedNodeCard from '../components/SeedNodeCard';
 import ResourceChart from '../components/ResourceChart';
 
 export default function Home(): JSX.Element {
@@ -22,7 +22,7 @@ export default function Home(): JSX.Element {
   const seedNodesQuery = useQuery<{ [nodeId: string]: any }>({
     queryKey: ['seedNodes'],
     queryFn: () =>
-      fetch(`${siteConfig.url}/api/seednodes`).then((response) =>
+      fetch(`${siteConfig.url}/api/seednodes/status`).then((response) =>
         response.json(),
       ),
   });
@@ -65,10 +65,10 @@ export default function Home(): JSX.Element {
           <div className="flex flex-wrap justify-center gap-3">
             {seedNodesQuery.data != null ? (
               Object.entries(seedNodesQuery.data).map(([nodeId, data]) => (
-                <NodeCard
+                <SeedNodeCard
                   className="flex-grow-[0.5] flex-shrink min-w-0"
                   nodeId={nodeId}
-                  remoteInfo={data}
+                  data={data}
                 />
               ))
             ) : (
