@@ -1,10 +1,10 @@
-# Matrix.ai
+# Polykey Network Dashboard
 
-Main website for Polykey. This uses Docusaurus as a CMS.
+Network dashboard for Polykey. This uses Docusaurus as a CMS.
 
 GitLab builds this site via the CI/CD into static pages, rendering the markdown files.
 
-The CI/CD pushes it to [polykey.com](https://polykey.com) which is hosted by Cloudflare's worker system.
+The CI/CD pushes it to [testnet.polykey.com](https://testnet.polykey.com) and [mainnet.polykey.com](https://mainnet.polykey.com) which is hosted by Cloudflare's worker system.
 
 ## Development
 
