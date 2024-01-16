@@ -55,7 +55,9 @@ build:integration:
   stage: build
   needs: []
   variables:
-    URL: 'https://testnet.polykey.com'
+    # Embedded during docusaurus build
+    POLYKEY_NETWORK_STATUS_PROT: 'https'
+    POLYKEY_NETWORK_STATUS_HOST: 'testnet.polykey.com'
   script:
     - echo 'Perform static site generation'
     - >
@@ -74,7 +76,9 @@ build:release:
   stage: build
   needs: []
   variables:
-    URL: 'https://mainnet.polykey.com'
+    # Embedded during docusaurus build
+    POLYKEY_NETWORK_STATUS_PROT: 'https'
+    POLYKEY_NETWORK_STATUS_HOST: 'mainnet.polykey.com'
   script:
     - echo 'Perform static site generation'
     - >

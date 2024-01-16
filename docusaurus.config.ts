@@ -2,6 +2,7 @@ import type { Config } from '@docusaurus/types';
 import type { UserThemeConfig } from '@docusaurus/theme-common';
 import type { Options as PluginPagesOptions } from '@docusaurus/plugin-content-pages';
 import type { Options as ThemeClassicOptions } from '@docusaurus/theme-classic';
+import nodeUrl from 'node:url';
 import { themes as prismThemes } from 'prism-react-renderer';
 
 const lightCodeTheme = prismThemes.github;
@@ -166,10 +167,22 @@ const themeConfig: UserThemeConfig = {
   },
 };
 
+const url = nodeUrl.format({
+  protocol: process.env.POLYKEY_NETWORK_STATUS_PROT,
+  hostname: process.env.POLYKEY_NETWORK_STATUS_HOST,
+  port: process.env.POLYKEY_NETWORK_STATUS_PORT,
+});
+
+if (url.length < 1) {
+  throw new Error(
+    'Missing `POLYKEY_NETWORK_STATUS_PROT` or `POLYKEY_NETWORK_STATUS_HOST` or `POLYKEY_NETWORK_STATUS_PORT`',
+  );
+}
+
 const config: Config = {
   title: 'Polykey Network Dashboard',
   tagline: 'View Polykey Network Activity',
-  url: process.env.URL ?? 'https://testnet.polykey.com',
+  url: url,
   baseUrl: '/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
