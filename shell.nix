@@ -5,8 +5,8 @@ mkShell {
   nativeBuildInputs = [
     nodejs
     shellcheck
-    gitAndTools.gh
-    jq
+    gh
+    git-lfs
   ];
   shellHook = ''
     echo "Entering $(npm pkg get name)"
