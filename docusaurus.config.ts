@@ -23,6 +23,16 @@ const pluginThemeClassic: [string, ThemeClassicOptions] = [
 
 const pluginClientRedirects = ['@docusaurus/plugin-client-redirects', {}];
 
+const pluginTailwind = () => {
+  return {
+    name: 'docusaurus-plugin-tailwindcss',
+    configurePostCss(postcssOptions: any) {
+      postcssOptions.plugins.push(require('tailwindcss'));
+      return postcssOptions;
+    },
+  };
+};
+
 const themeConfig: UserThemeConfig = {
   colorMode: {
     disableSwitch: true,
@@ -171,7 +181,12 @@ const config: Config = {
     locales: ['en'],
   },
   staticDirectories: ['static'],
-  plugins: [pluginPages, pluginThemeClassic, pluginClientRedirects],
+  plugins: [
+    pluginPages,
+    pluginThemeClassic,
+    pluginClientRedirects,
+    pluginTailwind,
+  ],
   themeConfig,
 };
 
