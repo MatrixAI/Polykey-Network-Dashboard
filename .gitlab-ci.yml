@@ -136,7 +136,7 @@ integration:deployment:
     - echo 'Perform service deployment for staging'
     - >
       nix-shell --arg ci true --run $'
-      npm run deploy;
+      npm run deploy -- --env staging;
       '
   rules:
     # Runs on master commits

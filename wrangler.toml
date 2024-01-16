@@ -3,12 +3,16 @@ main = "worker.ts"
 compatibility_date = "2023-03-06"
 workers_dev = true
 send_metrics = false
-routes = [
-  "testnet.polykey.com",
-  "testnet.polykey.com/*",
-]
 [site]
   bucket = "./public"
+
+[env.staging]
+  name = "polykey-network-dashboard-staging"
+  routes = [
+    "testnet.polykey.com",
+    "testnet.polykey.com/*",
+  ]
+  workers_dev = false
 
 [env.production]
   name = "polykey-network-dashboard"
