@@ -46,6 +46,20 @@ export default function Home(): JSX.Element {
       ),
     refetchInterval: 60 * 1000,
   });
+  const deploymentsQuery = useQuery<Array<{
+    id: string;
+    commitHash: string;
+    startedOn: number;
+    finishedOn?: number;
+    progress: number;
+  }>>({
+    queryKey: ['deployments'],
+    queryFn: () =>
+      fetch(`${siteConfig.url}/api/deployments`).then((response) =>
+        response.json(),
+      ),
+    refetchInterval: 60 * 1000,
+  });
 
   return (
     <Layout
@@ -74,6 +88,43 @@ export default function Home(): JSX.Element {
             ) : (
               <></>
             )}
+          </div>
+          <div className='bg-[#E4F6F2] rounded-2xl p-3'>
+            <span className="font-semibold">Deployments:</span>
+            <table className='w-full mt-3 max-h-96'>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th className='w-full'>Commit Hash</th>
+                  <th>Started On</th>
+                  <th>Finished On</th>
+                  <th>Progress</th>
+                </tr>
+              </thead>
+              <tbody>
+                {deploymentsQuery.data != null && deploymentsQuery.data.length !== 0 ? (
+                  deploymentsQuery.data.map(
+                    (deployment) => (
+                      <tr>
+                        <td>{deployment.id}</td>
+                        <td>{deployment.commitHash}</td>
+                        <td>{new Date(deployment.startedOn).toISOString()}</td>
+                        <td>{deployment.finishedOn == null ? "" : new Date(deployment.finishedOn).toISOString()}</td>
+                        <td>
+                          {deployment.progress * 100}%
+                        </td>
+                      </tr>
+                    ),
+                  )
+                ) : (
+                  <tr>
+                    <td colSpan={5} align="center">
+                      No deployments have been recorded
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
           <div className="w-full">
             <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
