@@ -11,6 +11,9 @@ const NodeCard = React.forwardRef<
       agentPort: number;
       clientHost: string;
       clientPort: number;
+      versionMetadata: {
+        cliAgentCommitHash: string;
+      }
     };
   }
   // Complains about props not being validated
@@ -45,6 +48,12 @@ const NodeCard = React.forwardRef<
           <span className="font-semibold">Client Service Address:</span>
           <div className="overflow-x-auto break-normal">
             {data.clientHost}:{data.clientPort}
+          </div>
+          <span className="font-semibold">Commit Hash:</span>
+          <div className="overflow-x-auto break-normal">
+              <a href={`https://github.com/MatrixAI/Polykey-CLI/commit/${data.versionMetadata.cliAgentCommitHash}`}>
+                {data.versionMetadata.cliAgentCommitHash}
+              </a>
           </div>
         </>
       ) : (

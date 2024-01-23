@@ -100,8 +100,8 @@ function ResourceChart({
             },
             limits: {
               x: {
-                min: timestamps.at(-1),
-                max: timestamps.at(0),
+                min: timestamps.at(0),
+                max: timestamps.at(-1),
               },
             },
           },
