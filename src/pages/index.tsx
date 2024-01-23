@@ -63,13 +63,6 @@ export default function Home(): JSX.Element {
     refetchInterval: 60 * 1000,
   });
 
-  const seedNodesCommitHashes =
-    seedNodesQuery.data == null
-      ? undefined
-      : Object.values(seedNodesQuery.data).map(
-          (seedNode) => seedNode.versionMetadata.cliAgentCommitHash,
-        );
-
   return (
     <Layout
       title={`${siteConfig.title}`}
@@ -126,37 +119,71 @@ export default function Home(): JSX.Element {
                   <th className="w-full">Commit Hash</th>
                   <th>Started On</th>
                   <th>Finished On</th>
-                  <th>Nodes</th>
                   <th>Progress</th>
                 </tr>
               </thead>
               <tbody>
                 {deploymentsQuery.data != null &&
                 deploymentsQuery.data.length !== 0 ? (
-                  deploymentsQuery.data.map((deployment) => (
-                    <tr>
-                      <td>{deployment.id}</td>
-                      <td>
-                        <a
-                          href={`https://github.com/MatrixAI/Polykey-CLI/commit/${deployment.commitHash}`}
-                        >
-                          {deployment.commitHash}
-                        </a>
-                      </td>
-                      <td>{new Date(deployment.startedOn).toISOString()}</td>
-                      <td>
-                        {deployment.finishedOn == null
-                          ? ''
-                          : new Date(deployment.finishedOn).toISOString()}
-                      </td>
-                      <td>
-                        {seedNodesCommitHashes?.filter(
-                          (commitHash) => commitHash === deployment.commitHash,
-                        ).length ?? 0}
-                      </td>
-                      <td>{deployment.progress * 100}%</td>
-                    </tr>
-                  ))
+                  deploymentsQuery.data.map((deployment) => {
+                    const radius = 30;
+                    const circumference = radius * 2 * Math.PI;
+                    const progress = Math.min(deployment.progress, 1);
+                    return (
+                      <tr>
+                        <td>{deployment.id}</td>
+                        <td>
+                          <a
+                            href={`https://github.com/MatrixAI/Polykey-CLI/commit/${deployment.commitHash}`}
+                          >
+                            {deployment.commitHash}
+                          </a>
+                        </td>
+                        <td>{new Date(deployment.startedOn).toISOString()}</td>
+                        <td>
+                          {deployment.finishedOn == null
+                            ? ''
+                            : new Date(deployment.finishedOn).toISOString()}
+                        </td>
+                        <td>
+                          <div className="inline-flex items-center justify-center overflow-hidden rounded-full bottom-5 left-5">
+                            <svg
+                              transform="rotate(-90)"
+                              style={{
+                                height: `${radius * 2}px`,
+                                width: `${radius * 2}px`,
+                              }}
+                            >
+                              <circle
+                                className="text-gray-300"
+                                stroke-width="10"
+                                stroke="currentColor"
+                                fill="transparent"
+                                r={radius}
+                                cx={radius}
+                                cy={radius}
+                              />
+                              <circle
+                                className="text-green-400"
+                                stroke-width="10"
+                                strokeDasharray={circumference}
+                                strokeDashoffset={
+                                  circumference - progress * circumference
+                                }
+                                stroke-linecap="round"
+                                stroke="currentColor"
+                                fill="transparent"
+                                r={radius}
+                                cx={radius}
+                                cy={radius}
+                              />
+                            </svg>
+                            <span className="absolute">{progress * 100}%</span>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td colSpan={5} align="center">
