@@ -46,13 +46,15 @@ export default function Home(): JSX.Element {
       ),
     refetchInterval: 60 * 1000,
   });
-  const deploymentsQuery = useQuery<Array<{
-    id: string;
-    commitHash: string;
-    startedOn: number;
-    finishedOn?: number;
-    progress: number;
-  }>>({
+  const deploymentsQuery = useQuery<
+    Array<{
+      id: string;
+      commitHash: string;
+      startedOn: number;
+      finishedOn?: number;
+      progress: number;
+    }>
+  >({
     queryKey: ['deployments'],
     queryFn: () =>
       fetch(`${siteConfig.url}/api/deployments`).then((response) =>
@@ -61,9 +63,12 @@ export default function Home(): JSX.Element {
     refetchInterval: 60 * 1000,
   });
 
-  const seedNodesCommitHashes = seedNodesQuery.data == null ? undefined : Object.values(seedNodesQuery.data).map((seedNode) =>
-    seedNode.versionMetadata.cliAgentCommitHash
-  );
+  const seedNodesCommitHashes =
+    seedNodesQuery.data == null
+      ? undefined
+      : Object.values(seedNodesQuery.data).map(
+          (seedNode) => seedNode.versionMetadata.cliAgentCommitHash,
+        );
 
   return (
     <Layout
@@ -112,13 +117,13 @@ export default function Home(): JSX.Element {
               )}
             </div>
           </div>
-          <div className='bg-[#E4F6F2] rounded-2xl p-3'>
+          <div className="bg-[#E4F6F2] rounded-2xl p-3">
             <span className="font-semibold">Deployments:</span>
-            <table className='w-full mt-3 max-h-96'>
+            <table className="w-full mt-3 max-h-96">
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th className='w-full'>Commit Hash</th>
+                  <th className="w-full">Commit Hash</th>
                   <th>Started On</th>
                   <th>Finished On</th>
                   <th>Nodes</th>
@@ -126,27 +131,32 @@ export default function Home(): JSX.Element {
                 </tr>
               </thead>
               <tbody>
-                {deploymentsQuery.data != null && deploymentsQuery.data.length !== 0 ? (
-                  deploymentsQuery.data.map(
-                    (deployment) => (
-                      <tr>
-                        <td>{deployment.id}</td>
-                        <td>
-                          <a href={`https://github.com/MatrixAI/Polykey-CLI/commit/${deployment.commitHash}`}>
-                            {deployment.commitHash}
-                          </a>
-                        </td>
-                        <td>{new Date(deployment.startedOn).toISOString()}</td>
-                        <td>{deployment.finishedOn == null ? "" : new Date(deployment.finishedOn).toISOString()}</td>
-                        <td>
-                          {seedNodesCommitHashes?.filter((commitHash) => commitHash === deployment.commitHash).length ?? 0}
-                        </td>
-                        <td>
-                          {deployment.progress * 100}%
-                        </td>
-                      </tr>
-                    ),
-                  )
+                {deploymentsQuery.data != null &&
+                deploymentsQuery.data.length !== 0 ? (
+                  deploymentsQuery.data.map((deployment) => (
+                    <tr>
+                      <td>{deployment.id}</td>
+                      <td>
+                        <a
+                          href={`https://github.com/MatrixAI/Polykey-CLI/commit/${deployment.commitHash}`}
+                        >
+                          {deployment.commitHash}
+                        </a>
+                      </td>
+                      <td>{new Date(deployment.startedOn).toISOString()}</td>
+                      <td>
+                        {deployment.finishedOn == null
+                          ? ''
+                          : new Date(deployment.finishedOn).toISOString()}
+                      </td>
+                      <td>
+                        {seedNodesCommitHashes?.filter(
+                          (commitHash) => commitHash === deployment.commitHash,
+                        ).length ?? 0}
+                      </td>
+                      <td>{deployment.progress * 100}%</td>
+                    </tr>
+                  ))
                 ) : (
                   <tr>
                     <td colSpan={5} align="center">
