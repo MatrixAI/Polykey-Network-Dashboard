@@ -62,6 +62,8 @@ function ResourceChart({
             type: 'time',
           },
           y: {
+            min: 0,
+            max: 100,
             ticks: {
               callback: (value) => {
                 return value + '%';
