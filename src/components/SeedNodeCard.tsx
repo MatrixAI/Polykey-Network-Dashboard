@@ -54,7 +54,7 @@ const NodeCard = React.forwardRef<
             <a
               href={`https://github.com/MatrixAI/Polykey-CLI/commit/${data.versionMetadata.cliAgentCommitHash}`}
             >
-              {data.versionMetadata.cliAgentCommitHash}
+              {data.versionMetadata?.cliAgentCommitHash}
             </a>
           </div>
         </>
