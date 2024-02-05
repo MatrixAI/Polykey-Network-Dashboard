@@ -146,7 +146,7 @@ export default function Home(): JSX.Element {
                             : new Date(deployment.finishedOn).toISOString()}
                         </td>
                         <td>
-                          <div className="inline-flex items-center justify-center overflow-hidden rounded-full bottom-5 left-5">
+                          <div className="relative inline-flex items-center justify-center overflow-hidden rounded-full">
                             <svg
                               transform="rotate(-90)"
                               style={{
