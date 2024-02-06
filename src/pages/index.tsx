@@ -49,7 +49,7 @@ export default function Home(): JSX.Element {
   const deploymentsQuery = useQuery<
     Array<{
       id: string;
-      commitHash: string;
+      versionMetadata: Record<string, string | undefined>;
       startedOn: number;
       finishedOn?: number;
       progress: number;
@@ -62,6 +62,18 @@ export default function Home(): JSX.Element {
       ),
     refetchInterval: 60 * 1000,
   });
+
+  const versionMetadataKeys = deploymentsQuery.data?.reduce(
+    (acc, deployment) => {
+      for (const key of Object.keys(deployment.versionMetadata)) {
+        acc.add(key);
+      }
+      return acc;
+    },
+    new Set<string>(),
+  );
+  const versionMetadataKeysSorted =
+    versionMetadataKeys != null ? [...versionMetadataKeys].sort() : undefined;
 
   return (
     <Layout
@@ -82,6 +94,7 @@ export default function Home(): JSX.Element {
             {seedNodesQuery.data != null ? (
               Object.entries(seedNodesQuery.data).map(([nodeId, data]) => (
                 <SeedNodeCard
+                  key={nodeId}
                   className="flex-grow-[0.5] flex-shrink min-w-0"
                   nodeId={nodeId}
                   data={data}
@@ -113,16 +126,16 @@ export default function Home(): JSX.Element {
           <div className="bg-[#E4F6F2] rounded-2xl p-3">
             <span className="font-semibold">Deployments:</span>
             <table className="w-full mt-3 max-h-96">
-              <thead>
+              <tbody className="w-full table">
                 <tr>
                   <th>ID</th>
-                  <th className="w-full">Commit Hash</th>
+                  {(versionMetadataKeysSorted ?? []).map((key) => (
+                    <th key={key}>{key}</th>
+                  ))}
                   <th>Started On</th>
                   <th>Finished On</th>
                   <th>Progress</th>
                 </tr>
-              </thead>
-              <tbody>
                 {deploymentsQuery.data != null &&
                 deploymentsQuery.data.length !== 0 ? (
                   deploymentsQuery.data.map((deployment) => {
@@ -130,57 +143,76 @@ export default function Home(): JSX.Element {
                     const circumference = radius * 2 * Math.PI;
                     const progress = Math.min(deployment.progress, 1);
                     return (
-                      <tr>
-                        <td>{deployment.id}</td>
-                        <td>
-                          <a
-                            href={`https://github.com/MatrixAI/Polykey-CLI/commit/${deployment.commitHash}`}
-                          >
-                            {deployment.commitHash}
-                          </a>
-                        </td>
-                        <td>{new Date(deployment.startedOn).toISOString()}</td>
-                        <td>
-                          {deployment.finishedOn == null
-                            ? ''
-                            : new Date(deployment.finishedOn).toISOString()}
-                        </td>
-                        <td>
-                          <div className="relative inline-flex items-center justify-center overflow-hidden rounded-full">
-                            <svg
-                              transform="rotate(-90)"
-                              style={{
-                                height: `${radius * 2}px`,
-                                width: `${radius * 2}px`,
-                              }}
-                            >
-                              <circle
-                                className="text-gray-300"
-                                stroke-width="10"
-                                stroke="currentColor"
-                                fill="transparent"
-                                r={radius}
-                                cx={radius}
-                                cy={radius}
-                              />
-                              <circle
-                                className="text-green-400"
-                                stroke-width="10"
-                                strokeDasharray={circumference}
-                                strokeDashoffset={
-                                  circumference - progress * circumference
-                                }
-                                stroke-linecap="round"
-                                stroke="currentColor"
-                                fill="transparent"
-                                r={radius}
-                                cx={radius}
-                                cy={radius}
-                              />
-                            </svg>
-                            <span className="absolute">{progress * 100}%</span>
-                          </div>
-                        </td>
+                      <tr key={deployment.id}>
+                        <>
+                          <td>{deployment.id}</td>
+                          {(versionMetadataKeysSorted ?? []).map((key) => {
+                            const value = deployment.versionMetadata[key];
+                            if (value == null) {
+                              return <td key={key}></td>;
+                            }
+                            switch (key) {
+                              case 'commitHash':
+                                return (
+                                  <td key={key}>
+                                    <a
+                                      href={`https://github.com/MatrixAI/Polykey-CLI/commit/${value}`}
+                                    >
+                                      {value}
+                                    </a>
+                                  </td>
+                                );
+                              default:
+                                return <td key={key}>{value}</td>;
+                            }
+                          })}
+                          <td>
+                            {new Date(deployment.startedOn).toISOString()}
+                          </td>
+                          <td>
+                            {deployment.finishedOn == null
+                              ? ''
+                              : new Date(deployment.finishedOn).toISOString()}
+                          </td>
+                          <td className="text-center">
+                            <div className="relative inline-flex items-center justify-center overflow-hidden rounded-full">
+                              <svg
+                                transform="rotate(-90)"
+                                style={{
+                                  height: `${radius * 2}px`,
+                                  width: `${radius * 2}px`,
+                                }}
+                              >
+                                <circle
+                                  className="text-gray-300"
+                                  strokeWidth={10}
+                                  stroke="currentColor"
+                                  fill="transparent"
+                                  r={radius}
+                                  cx={radius}
+                                  cy={radius}
+                                />
+                                <circle
+                                  className="text-green-400"
+                                  strokeWidth={10}
+                                  strokeDasharray={circumference}
+                                  strokeDashoffset={
+                                    circumference - progress * circumference
+                                  }
+                                  strokeLinecap="round"
+                                  stroke="currentColor"
+                                  fill="transparent"
+                                  r={radius}
+                                  cx={radius}
+                                  cy={radius}
+                                />
+                              </svg>
+                              <span className="absolute">
+                                {progress * 100}%
+                              </span>
+                            </div>
+                          </td>
+                        </>
                       </tr>
                     );
                   })
