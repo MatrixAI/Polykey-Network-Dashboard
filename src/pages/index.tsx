@@ -94,6 +94,7 @@ export default function Home(): JSX.Element {
             {seedNodesQuery.data != null ? (
               Object.entries(seedNodesQuery.data).map(([nodeId, data]) => (
                 <SeedNodeCard
+                  key={nodeId}
                   className="flex-grow-[0.5] flex-shrink min-w-0"
                   nodeId={nodeId}
                   data={data}
@@ -125,7 +126,7 @@ export default function Home(): JSX.Element {
           <div className="bg-[#E4F6F2] rounded-2xl p-3">
             <span className="font-semibold">Deployments:</span>
             <table className="w-full mt-3 max-h-96">
-              <thead>
+              <tbody className="w-full table">
                 <tr>
                   <th>ID</th>
                   {(versionMetadataKeysSorted ?? []).map((key) => (
@@ -135,8 +136,6 @@ export default function Home(): JSX.Element {
                   <th>Finished On</th>
                   <th>Progress</th>
                 </tr>
-              </thead>
-              <tbody>
                 {deploymentsQuery.data != null &&
                 deploymentsQuery.data.length !== 0 ? (
                   deploymentsQuery.data.map((deployment) => {
@@ -144,18 +143,18 @@ export default function Home(): JSX.Element {
                     const circumference = radius * 2 * Math.PI;
                     const progress = Math.min(deployment.progress, 1);
                     return (
-                      <tr>
+                      <tr key={deployment.id}>
                         <>
                           <td>{deployment.id}</td>
                           {(versionMetadataKeysSorted ?? []).map((key) => {
                             const value = deployment.versionMetadata[key];
                             if (value == null) {
-                              return <td></td>;
+                              return <td key={key}></td>;
                             }
                             switch (key) {
                               case 'commitHash':
                                 return (
-                                  <td>
+                                  <td key={key}>
                                     <a
                                       href={`https://github.com/MatrixAI/Polykey-CLI/commit/${value}`}
                                     >
@@ -175,7 +174,7 @@ export default function Home(): JSX.Element {
                               ? ''
                               : new Date(deployment.finishedOn).toISOString()}
                           </td>
-                          <td>
+                          <td className="text-center">
                             <div className="relative inline-flex items-center justify-center overflow-hidden rounded-full">
                               <svg
                                 transform="rotate(-90)"
