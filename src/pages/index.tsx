@@ -49,7 +49,7 @@ export default function Home(): JSX.Element {
   const deploymentsQuery = useQuery<
     Array<{
       id: string;
-      commitHash: string;
+      versionMetadata: Record<string, string | undefined>;
       startedOn: number;
       finishedOn?: number;
       progress: number;
@@ -62,6 +62,18 @@ export default function Home(): JSX.Element {
       ),
     refetchInterval: 60 * 1000,
   });
+
+  const versionMetadataKeys = deploymentsQuery.data?.reduce(
+    (acc, deployment) => {
+      for (const key of Object.keys(deployment.versionMetadata)) {
+        acc.add(key);
+      }
+      return acc;
+    },
+    new Set<string>(),
+  );
+  const versionMetadataKeysSorted =
+    versionMetadataKeys != null ? [...versionMetadataKeys].sort() : undefined;
 
   return (
     <Layout
@@ -116,7 +128,9 @@ export default function Home(): JSX.Element {
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th className="w-full">Commit Hash</th>
+                  {(versionMetadataKeysSorted ?? []).map((key) => (
+                    <th key={key}>{key}</th>
+                  ))}
                   <th>Started On</th>
                   <th>Finished On</th>
                   <th>Progress</th>
@@ -131,56 +145,75 @@ export default function Home(): JSX.Element {
                     const progress = Math.min(deployment.progress, 1);
                     return (
                       <tr>
-                        <td>{deployment.id}</td>
-                        <td>
-                          <a
-                            href={`https://github.com/MatrixAI/Polykey-CLI/commit/${deployment.commitHash}`}
-                          >
-                            {deployment.commitHash}
-                          </a>
-                        </td>
-                        <td>{new Date(deployment.startedOn).toISOString()}</td>
-                        <td>
-                          {deployment.finishedOn == null
-                            ? ''
-                            : new Date(deployment.finishedOn).toISOString()}
-                        </td>
-                        <td>
-                          <div className="relative inline-flex items-center justify-center overflow-hidden rounded-full">
-                            <svg
-                              transform="rotate(-90)"
-                              style={{
-                                height: `${radius * 2}px`,
-                                width: `${radius * 2}px`,
-                              }}
-                            >
-                              <circle
-                                className="text-gray-300"
-                                stroke-width="10"
-                                stroke="currentColor"
-                                fill="transparent"
-                                r={radius}
-                                cx={radius}
-                                cy={radius}
-                              />
-                              <circle
-                                className="text-green-400"
-                                stroke-width="10"
-                                strokeDasharray={circumference}
-                                strokeDashoffset={
-                                  circumference - progress * circumference
-                                }
-                                stroke-linecap="round"
-                                stroke="currentColor"
-                                fill="transparent"
-                                r={radius}
-                                cx={radius}
-                                cy={radius}
-                              />
-                            </svg>
-                            <span className="absolute">{progress * 100}%</span>
-                          </div>
-                        </td>
+                        <>
+                          <td>{deployment.id}</td>
+                          {(versionMetadataKeysSorted ?? []).map((key) => {
+                            const value = deployment.versionMetadata[key];
+                            if (value == null) {
+                              return <td></td>;
+                            }
+                            switch (key) {
+                              case 'commitHash':
+                                return (
+                                  <td>
+                                    <a
+                                      href={`https://github.com/MatrixAI/Polykey-CLI/commit/${value}`}
+                                    >
+                                      {value}
+                                    </a>
+                                  </td>
+                                );
+                              default:
+                                return <td key={key}>{value}</td>;
+                            }
+                          })}
+                          <td>
+                            {new Date(deployment.startedOn).toISOString()}
+                          </td>
+                          <td>
+                            {deployment.finishedOn == null
+                              ? ''
+                              : new Date(deployment.finishedOn).toISOString()}
+                          </td>
+                          <td>
+                            <div className="relative inline-flex items-center justify-center overflow-hidden rounded-full">
+                              <svg
+                                transform="rotate(-90)"
+                                style={{
+                                  height: `${radius * 2}px`,
+                                  width: `${radius * 2}px`,
+                                }}
+                              >
+                                <circle
+                                  className="text-gray-300"
+                                  strokeWidth={10}
+                                  stroke="currentColor"
+                                  fill="transparent"
+                                  r={radius}
+                                  cx={radius}
+                                  cy={radius}
+                                />
+                                <circle
+                                  className="text-green-400"
+                                  strokeWidth={10}
+                                  strokeDasharray={circumference}
+                                  strokeDashoffset={
+                                    circumference - progress * circumference
+                                  }
+                                  strokeLinecap="round"
+                                  stroke="currentColor"
+                                  fill="transparent"
+                                  r={radius}
+                                  cx={radius}
+                                  cy={radius}
+                                />
+                              </svg>
+                              <span className="absolute">
+                                {progress * 100}%
+                              </span>
+                            </div>
+                          </td>
+                        </>
                       </tr>
                     );
                   })
