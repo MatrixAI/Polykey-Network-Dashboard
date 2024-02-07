@@ -12,7 +12,7 @@ const NodeCard = React.forwardRef<
       clientHost: string;
       clientPort: number;
       versionMetadata: {
-        cliAgentCommitHash: string;
+        commitHash: string;
       };
     };
   }
@@ -52,9 +52,9 @@ const NodeCard = React.forwardRef<
           <span className="font-semibold">Commit Hash:</span>
           <div className="overflow-x-auto break-normal">
             <a
-              href={`https://github.com/MatrixAI/Polykey-CLI/commit/${data.versionMetadata.cliAgentCommitHash}`}
+              href={`https://github.com/MatrixAI/Polykey-CLI/commit/${data.versionMetadata.commitHash}`}
             >
-              {data.versionMetadata?.cliAgentCommitHash}
+              {data.versionMetadata?.commitHash}
             </a>
           </div>
         </>
