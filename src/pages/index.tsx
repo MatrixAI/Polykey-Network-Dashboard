@@ -57,9 +57,13 @@ export default function Home(): JSX.Element {
   >({
     queryKey: ['deployments'],
     queryFn: () =>
-      fetch(`${siteConfig.url}/api/deployments`).then((response) =>
-        response.json(),
-      ),
+      fetch(`${siteConfig.url}/api/deployments`).then(async (response) => {
+        const resp: any = await response.json();
+        if (Array.isArray(resp)) {
+          resp.length = 5;
+        }
+        return resp;
+      }),
     refetchInterval: 60 * 1000,
   });
 
@@ -125,7 +129,7 @@ export default function Home(): JSX.Element {
           </div>
           <div className="bg-[#E4F6F2] rounded-2xl p-3">
             <span className="font-semibold">Deployments:</span>
-            <table className="w-full mt-3 max-h-96">
+            <table className="w-full mt-3">
               <tbody className="w-full table">
                 <tr>
                   <th>ID</th>
@@ -156,9 +160,10 @@ export default function Home(): JSX.Element {
                                 return (
                                   <td key={key}>
                                     <a
+                                      title={value}
                                       href={`https://github.com/MatrixAI/Polykey-CLI/commit/${value}`}
                                     >
-                                      {value}
+                                      {value.slice(0, 7)}
                                     </a>
                                   </td>
                                 );
