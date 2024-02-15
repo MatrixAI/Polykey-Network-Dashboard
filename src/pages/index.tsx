@@ -3,6 +3,7 @@ import * as React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import { useQuery } from '@tanstack/react-query';
+import * as utils from '../utils';
 import Map from '../components/Map';
 import SeedNodeCard from '../components/SeedNodeCard';
 import ResourceChart from '../components/ResourceChart';
@@ -111,7 +112,13 @@ export default function Home(): JSX.Element {
           <div className="bg-[#E4F6F2] rounded-2xl p-3">
             <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
               {resourceCpuQuery.data != null ? (
-                <ResourceChart title="CPU Usage" data={resourceCpuQuery.data} />
+                <ResourceChart
+                  title="CPU Usage"
+                  data={utils.filterByKey(
+                    resourceCpuQuery.data,
+                    Object.keys(seedNodesQuery.data ?? []),
+                  )}
+                />
               ) : (
                 <></>
               )}
@@ -120,7 +127,10 @@ export default function Home(): JSX.Element {
               {resourceMemoryQuery.data != null ? (
                 <ResourceChart
                   title="Memory Usage"
-                  data={resourceMemoryQuery.data}
+                  data={utils.filterByKey(
+                    resourceMemoryQuery.data,
+                    Object.keys(seedNodesQuery.data ?? []),
+                  )}
                 />
               ) : (
                 <></>
