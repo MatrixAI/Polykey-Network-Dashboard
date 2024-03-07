@@ -159,7 +159,7 @@ export default function Home(): JSX.Element {
                       Loading Deployments
                     </td>
                   </tr>
-                ) : (deploymentsQuery.error != null) != null ? (
+                ) : deploymentsQuery.error != null ? (
                   <tr>
                     <td colSpan={5} align="center">
                       Could not fetch deployments from Polykey-Network-Status
