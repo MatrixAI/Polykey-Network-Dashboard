@@ -7,4 +7,11 @@ function filterByKey(obj: Record<any, any>, keys: Array<any>) {
     }, {});
 }
 
-export { filterByKey };
+function unwrapJson(response: Response): Promise<any> {
+  if (!response.ok) {
+    throw response.json();
+  }
+  return response.json();
+}
+
+export { filterByKey, unwrapJson };

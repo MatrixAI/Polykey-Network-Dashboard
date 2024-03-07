@@ -17,24 +17,20 @@ export default function Home(): JSX.Element {
         `${siteConfig.url}/api/nodes/geo?seek=${
           Date.now() - 1000 * 60 * 60 * 24 * 7
         }`,
-      ).then((response) => response.json()),
+      ).then(utils.unwrapJson),
     refetchInterval: 60 * 1000,
   });
   const seedNodesQuery = useQuery<{ [nodeId: string]: any }>({
     queryKey: ['seedNodes'],
     queryFn: () =>
-      fetch(`${siteConfig.url}/api/seednodes/status`).then((response) =>
-        response.json(),
-      ),
+      fetch(`${siteConfig.url}/api/seednodes/status`).then(utils.unwrapJson),
   });
   const resourceCpuQuery = useQuery<{
     [nodeId: string]: { values: Array<number>; timestamps: Array<number> };
   }>({
     queryKey: ['resourceCpu'],
     queryFn: () =>
-      fetch(`${siteConfig.url}/api/resource/cpu`).then((response) =>
-        response.json(),
-      ),
+      fetch(`${siteConfig.url}/api/resource/cpu`).then(utils.unwrapJson),
     refetchInterval: 60 * 1000,
   });
   const resourceMemoryQuery = useQuery<{
@@ -42,9 +38,7 @@ export default function Home(): JSX.Element {
   }>({
     queryKey: ['resourceMemory'],
     queryFn: () =>
-      fetch(`${siteConfig.url}/api/resource/memory`).then((response) =>
-        response.json(),
-      ),
+      fetch(`${siteConfig.url}/api/resource/memory`).then(utils.unwrapJson),
     refetchInterval: 60 * 1000,
   });
   const deploymentsQuery = useQuery<
@@ -59,7 +53,7 @@ export default function Home(): JSX.Element {
     queryKey: ['deployments'],
     queryFn: () =>
       fetch(`${siteConfig.url}/api/deployments`).then(async (response) => {
-        const resp: any = await response.json();
+        const resp = await utils.unwrapJson(response);
         if (Array.isArray(resp)) {
           resp.length = 5;
         }
@@ -79,7 +73,6 @@ export default function Home(): JSX.Element {
   );
   const versionMetadataKeysSorted =
     versionMetadataKeys != null ? [...versionMetadataKeys].sort() : undefined;
-
   return (
     <Layout
       title={`${siteConfig.title}`}
@@ -108,35 +101,45 @@ export default function Home(): JSX.Element {
             ) : (
               <></>
             )}
+            {seedNodesQuery.error != null ? (
+              <>Unable to fetch seednodes status from Polykey-Network-Status</>
+            ) : (
+              <></>
+            )}
           </div>
-          <div className="bg-[#E4F6F2] rounded-2xl p-3">
-            <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
-              {resourceCpuQuery.data != null ? (
-                <ResourceChart
-                  title="CPU Usage"
-                  data={utils.filterByKey(
-                    resourceCpuQuery.data,
-                    Object.keys(seedNodesQuery.data ?? []),
-                  )}
-                />
-              ) : (
-                <></>
-              )}
+          {resourceCpuQuery.error == null ||
+          resourceMemoryQuery.error == null ? (
+            <div className="bg-[#E4F6F2] rounded-2xl p-3">
+              <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
+                {resourceCpuQuery.data != null ? (
+                  <ResourceChart
+                    title="CPU Usage"
+                    data={utils.filterByKey(
+                      resourceCpuQuery.data,
+                      Object.keys(seedNodesQuery.data ?? []),
+                    )}
+                  />
+                ) : (
+                  <></>
+                )}
+              </div>
+              <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
+                {resourceMemoryQuery.data != null ? (
+                  <ResourceChart
+                    title="Memory Usage"
+                    data={utils.filterByKey(
+                      resourceMemoryQuery.data,
+                      Object.keys(seedNodesQuery.data ?? []),
+                    )}
+                  />
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
-            <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
-              {resourceMemoryQuery.data != null ? (
-                <ResourceChart
-                  title="Memory Usage"
-                  data={utils.filterByKey(
-                    resourceMemoryQuery.data,
-                    Object.keys(seedNodesQuery.data ?? []),
-                  )}
-                />
-              ) : (
-                <></>
-              )}
-            </div>
-          </div>
+          ) : (
+            <></>
+          )}
           <div className="bg-[#E4F6F2] rounded-2xl p-3">
             <span className="font-semibold">Deployments:</span>
             <table className="w-full mt-3">
@@ -150,8 +153,20 @@ export default function Home(): JSX.Element {
                   <th>Finished On</th>
                   <th>Progress</th>
                 </tr>
-                {deploymentsQuery.data != null &&
-                deploymentsQuery.data.length !== 0 ? (
+                {deploymentsQuery.isLoading ? (
+                  <tr>
+                    <td colSpan={5} align="center">
+                      Loading Deployments
+                    </td>
+                  </tr>
+                ) : (deploymentsQuery.error != null) != null ? (
+                  <tr>
+                    <td colSpan={5} align="center">
+                      Could not fetch deployments from Polykey-Network-Status
+                    </td>
+                  </tr>
+                ) : deploymentsQuery.data != null &&
+                  deploymentsQuery.data.length !== 0 ? (
                   deploymentsQuery.data.map((deployment) => {
                     const radius = 30;
                     const circumference = radius * 2 * Math.PI;
