@@ -36,6 +36,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^5.0.0-alpha.2",
+    "polykey": "^1.2.1-alpha.39",
     "postcss": "^8.4.31",
     "prettier": "^3.0.0",
     "prism-react-renderer": "^2.1.0",

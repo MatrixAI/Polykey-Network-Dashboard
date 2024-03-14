@@ -1,4 +1,4 @@
-import type { IpGeo } from '../types';
+import type { IpGeo, SeednodesStatusGetResult } from '../types';
 import * as React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
@@ -20,7 +20,7 @@ export default function Home(): JSX.Element {
       ).then(utils.unwrapJson),
     refetchInterval: 60 * 1000,
   });
-  const seedNodesQuery = useQuery<{ [nodeId: string]: any }>({
+  const seedNodesQuery = useQuery<SeednodesStatusGetResult>({
     queryKey: ['seedNodes'],
     queryFn: () =>
       fetch(`${siteConfig.url}/api/seednodes/status`).then(utils.unwrapJson),
