@@ -1,17 +1,18 @@
-# Polykey Network Dashboard
+# Polykey-Network-Dashboard
 
-staging:[![pipeline status](https://gitlab.com/MatrixAI/open-source/Polykey-Network-Dashboard/badges/staging/pipeline.svg)](https://gitlab.com/MatrixAI/open-source/Polykey-Network-Dashboard/commits/staging)
-master:[![pipeline status](https://gitlab.com/MatrixAI/open-source/Polykey-Network-Dashboard/badges/master/pipeline.svg)](https://gitlab.com/MatrixAI/open-source/Polykey-Network-Dashboard/commits/master)
+Network dashboard for Polykey.
 
-Network dashboard for Polykey. This uses Docusaurus as a CMS.
+## About
 
-GitLab builds this site via the CI/CD into static pages, rendering the markdown files.
+This uses Docusaurus as a CMS.
 
-The CI/CD pushes it to [testnet.polykey.com](https://testnet.polykey.com) and [mainnet.polykey.com](https://mainnet.polykey.com) which is hosted by Cloudflare's worker system.
+GitHub builds this site via the CI/CD into static pages, rendering the markdown files.
+
+The CI/CD then pushes it to [testnet.polykey.com](https://testnet.polykey.com) and [mainnet.polykey.com](https://mainnet.polykey.com) which is hosted by Cloudflare's worker system.
 
 ## Development
 
-Run `nix-shell`, and once you're inside, you can use:
+Run `nix develop`, and once you're inside, you can use:
 
 ```sh
 # starts a local version
@@ -28,7 +29,7 @@ npm run lintfix
 
 You need to do setup the `.env` from `.env.example` if you want to successfully deploy to Cloudflare.
 
-We use Git LFS to store all media in `images/**`. It's important to ensure that `git-lfs` is installed on your system before you contribute anything (on NixOS, it is installed as a separate package to `git`). By default anything put under `images/**` when using `git add` (after LFS is setup) will be uploaded to LFS, and thus the repository will only have links. Because LFS is enabled, it is used on both GitHub and GitLab.
+We use Git LFS to store all media in `images/**`. It's important to ensure that `git-lfs` is installed on your system before you contribute anything (on NixOS, it is installed as a separate package to `git`). By default anything put under `images/**` when using `git add` (after LFS is setup) will be uploaded to LFS, and thus the repository will only have links. Because LFS is enabled, it is used on GitHub.
 
 If this is the first time you cloned the repository, you must use `git lfs install` to ensure your local repository has LFS setup. It may be automatically setup if you already had it installed prior to cloning.
 
@@ -52,9 +53,9 @@ Note that some pages were not able to be put into `/pages` due to to more comple
 
 Sometimes markdown syntax just doesn't cut it, and HTML syntax needs to be used.
 
-While `docusaurus` is flexible, GitHub/GitLab is not.
+While `docusaurus` is flexible, GitHub is not.
 
-GitHub/GitLab will process the markdown and then sanitizes the HTML: https://github.com/github/markup#github-markup.
+GitHub will process the markdown and then sanitizes the HTML: https://github.com/github/markup#github-markup.
 
 There is a limited set of HTML tags are here: https://github.com/gjtorikian/html-pipeline/blob/03ae30d713199c2562951d627b98b75dc16939e4/lib/html/pipeline/sanitization_filter.rb#L40-L49
 
@@ -73,9 +74,9 @@ Markdown supports 2 ways of referencing images:
 
 The former is markdown syntax, the latter is HTML tag.
 
-In order to maintain portability, we always use absolute paths. This works on both GitHub/GitLab markdown rendering and also for `docusaurus`.
+In order to maintain portability, we always use absolute paths. This works on both GitHub markdown rendering and also for `docusaurus`.
 
-On GitHub/GitLab, which renders the markdown directly, the relative paths are considered relative to the location of the markdown file referencing the path. The absolute paths are considered relative to the root of the project repository. Therefore because `images` directory is located at the project root, it ends up being routable.
+On GitHub, which renders the markdown directly, the relative paths are considered relative to the location of the markdown file referencing the path. The absolute paths are considered relative to the root of the project repository. Therefore because `images` directory is located at the project root, it ends up being routable.
 
 With `docusaurus`, the absolute paths are looked up relative to `static` directory. Inside the `static` directory we have created symlinks pointing back to `../images`. This allows `docusaurus` to also resolve these paths which will be copied into the `/build/` directory.
 
@@ -85,7 +86,7 @@ Note that `docusaurus` doesn't do any special rendering for HTML tags, it uses t
 <img src={require('/images/foobar.png').default} />
 ```
 
-However this does not work in GitHub/GitLab. So this is not recommended to use.
+However this does not work in GitHub. So this is not recommended to use.
 
 Therefore if you want to add inline styles to an image and still use markdown syntax so you get the benefit of `docusaurus` asset processing, the styles must be applied outside the image reference in a surrounding tag:
 
@@ -97,7 +98,7 @@ Therefore if you want to add inline styles to an image and still use markdown sy
 </div>
 ```
 
-Take note of the whitespace newlines between, if no newlines are used, GitHub/GitLab will interpret this as all HTML. Also note that `<p></p>` will not work.
+Take note of the whitespace newlines between, if no newlines are used, GitHub will interpret this as all HTML. Also note that `<p></p>` will not work.
 
 Note that this won't work for resizing the images unfortunately. You have to apply the `width` attribute directly to the `<img />` tag. See: https://github.com/facebook/docusaurus/discussions/6465 for more information.
 
