@@ -45,6 +45,8 @@ jobs:
     steps:
       - run: entrypoint
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - name: Build dist
         env:
           POLYKEY_NETWORK_STATUS_PROT: 'https'
@@ -95,6 +97,8 @@ jobs:
     steps:
       - run: entrypoint
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - name: Build dist
         env:
           POLYKEY_NETWORK_STATUS_PROT: 'https'
