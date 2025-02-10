@@ -1,0 +1,33 @@
+name: "CI / Staging"
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  use-application-js-cloudflare-staging:
+    permissions:
+      contents: write
+      actions: write
+      checks: write
+      pull-requests: write
+    uses: MatrixAI/.github/.github/workflows/application-js-cloudflare-staging.yml@master
+    with:
+      ref: master
+    secrets:
+      NIXPKGS_PRIVATE_PAT: ${{ secrets.NIXPKGS_PRIVATE_PAT }}
+      DEPLOY_SECRETS: |
+        CLOUDFLARE_ACCOUNT_ID=${{ toJSON(secrets.CLOUDFLARE_ACCOUNT_ID) }}
+        CLOUDFLARE_ZONE_ID=${{ toJSON(secrets.CLOUDFLARE_ZONE_ID) }}
+        CLOUDFLARE_API_TOKEN=${{ toJSON(secrets.CLOUDFLARE_API_TOKEN) }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      GIT_AUTHOR_EMAIL: ${{ secrets.GIT_AUTHOR_EMAIL }}
+      GIT_AUTHOR_NAME: ${{ secrets.GIT_AUTHOR_NAME }}
+      GIT_COMMITTER_EMAIL: ${{ secrets.GIT_COMMITTER_EMAIL }}
+      GIT_COMMITTER_NAME: ${{ secrets.GIT_COMMITTER_NAME }}

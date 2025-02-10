@@ -14,7 +14,7 @@ send_metrics = false
   ]
   workers_dev = false
 
-[env.production]
+[env.master]
   name = "polykey-network-dashboard"
   routes = [
     "mainnet.polykey.com",

@@ -1,0 +1,26 @@
+name: "CI / Feature Closed"
+
+on:
+  pull_request:
+    types:
+      - closed
+  workflow_dispatch:
+    inputs:
+      featureBranch:
+        description: Specify the feature branch when triggering manually
+        required: true
+
+jobs:
+  use-application-js-cloudflare-feature-closed:
+    permissions:
+      contents: read
+    uses: MatrixAI/.github/.github/workflows/application-js-cloudflare-feature-closed.yml@master
+    with:
+      appName: zeta-house-docs
+      appHostname: docs.zeta.house
+      featureBranch: ${{ github.head_ref || inputs.featureBranch }}
+    secrets:
+      NIXPKGS_PRIVATE_PAT: ${{ secrets.NIXPKGS_PRIVATE_PAT }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

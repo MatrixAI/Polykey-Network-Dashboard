@@ -1,0 +1,27 @@
+name: "CI / Feature"
+
+on:
+  push:
+    branches:
+      - feature*
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  use-application-js-cloudflare-feature:
+    permissions:
+      contents: read
+      actions: write
+      checks: write
+    uses: MatrixAI/.github/.github/workflows/application-js-cloudflare-feature.yml@master
+    with:
+      ref: master
+    secrets:
+      NIXPKGS_PRIVATE_PAT: ${{ secrets.NIXPKGS_PRIVATE_PAT }}
+      DEPLOY_SECRETS: |
+        CLOUDFLARE_ACCOUNT_ID=${{ toJSON(secrets.CLOUDFLARE_ACCOUNT_ID) }}
+        CLOUDFLARE_ZONE_ID=${{ toJSON(secrets.CLOUDFLARE_ZONE_ID) }}
+        CLOUDFLARE_API_TOKEN=${{ toJSON(secrets.CLOUDFLARE_API_TOKEN) }}
