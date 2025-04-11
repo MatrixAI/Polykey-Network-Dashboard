@@ -20,6 +20,7 @@ jobs:
     uses: MatrixAI/.github/.github/workflows/application-js-cloudflare-staging.yml@master
     with:
       ref: master
+      environment: staging
     secrets:
       NIXPKGS_PRIVATE_PAT: ${{ secrets.NIXPKGS_PRIVATE_PAT }}
       DEPLOY_SECRETS: |

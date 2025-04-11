@@ -19,6 +19,7 @@ jobs:
       appName: zeta-house-docs
       appHostname: docs.zeta.house
       featureBranch: ${{ github.head_ref || inputs.featureBranch }}
+      environment: feature
     secrets:
       NIXPKGS_PRIVATE_PAT: ${{ secrets.NIXPKGS_PRIVATE_PAT }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

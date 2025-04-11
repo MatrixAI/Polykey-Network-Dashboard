@@ -18,6 +18,7 @@ jobs:
     uses: MatrixAI/.github/.github/workflows/application-js-cloudflare-master.yml@master
     with:
       ref: master
+      environment: master
     secrets:
       NIXPKGS_PRIVATE_PAT: ${{ secrets.NIXPKGS_PRIVATE_PAT }}
       DEPLOY_SECRETS: |
