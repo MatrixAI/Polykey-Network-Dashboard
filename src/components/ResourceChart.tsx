@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Line } from 'react-chartjs-2';
 
-function ResourceChart({
+const ResourceChart = ({
   data,
   title,
   ...props
@@ -13,7 +13,7 @@ function ResourceChart({
     };
   };
   title?: string;
-} & React.HTMLAttributes<HTMLCanvasElement>) {
+} & React.HTMLAttributes<HTMLCanvasElement>) => {
   const [isRegistered, setIsRegistered] = React.useState(false);
   React.useEffect(() => {
     const registerList: Array<any> = [];
@@ -47,8 +47,6 @@ function ResourceChart({
   const timestamps = Object.values(data).at(0)?.timestamps ?? [];
   return isRegistered ? (
     <Line
-      title={title}
-      datasetIdKey="id"
       data={{
         labels: timestamps,
         datasets: Object.entries(data).map(([nodeId, data]) => ({
@@ -56,6 +54,8 @@ function ResourceChart({
           data: data.values,
         })),
       }}
+      datasetIdKey="id"
+      height={200}
       options={{
         scales: {
           x: {
@@ -114,12 +114,10 @@ function ResourceChart({
           },
         },
       }}
-      height={200}
+      title={title}
       {...props}
     />
-  ) : (
-    <></>
-  );
-}
+  ) : null;
+};
 
 export default ResourceChart;

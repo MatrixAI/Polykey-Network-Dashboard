@@ -1,4 +1,4 @@
-import type { SeednodesStatusGetResult } from '../types';
+import type { SeednodesStatusGetResult } from '../types.js';
 import * as React from 'react';
 import clsx from 'clsx';
 
@@ -9,21 +9,20 @@ const NodeCard = React.forwardRef<
     data?: SeednodesStatusGetResult[''];
   }
   // Complains about props not being validated
-  // eslint-disable-next-line
 >(({ className, nodeId, data, ...props }, ref) => {
-  let contents: React.JSX.Element;
+  let contents: React.JSX.Element | null;
   if (data == null) {
-    contents = <></>;
+    contents = null;
   } else if ('error' in data) {
     contents = (
       <>
         <span className="font-semibold">Error:</span>
-        <div className="overflow-x-auto break-normal flex gap-1 items-center">
-          <div className="w-3 h-3 rounded-full bg-red-400" />
+        <div className="flex items-center gap-1 overflow-x-auto break-normal">
+          <div className="size-3 rounded-full bg-red-400" />
           {data.error}
         </div>
         <span className="font-semibold">Message:</span>
-        <pre className="overflow-x-auto break-normal flex gap-1 items-center">
+        <pre className="flex items-center gap-1 overflow-x-auto break-normal">
           {data.message}
         </pre>
       </>
@@ -32,8 +31,8 @@ const NodeCard = React.forwardRef<
     contents = (
       <>
         <span className="font-semibold">Status:</span>
-        <div className="overflow-x-auto break-normal flex gap-1 items-center">
-          <div className="w-3 h-3 rounded-full bg-red-400" />
+        <div className="flex items-center gap-1 overflow-x-auto break-normal">
+          <div className="size-3 rounded-full bg-red-400" />
           {data.status}
         </div>
       </>
@@ -42,8 +41,8 @@ const NodeCard = React.forwardRef<
     contents = (
       <>
         <span className="font-semibold">Status:</span>
-        <div className="overflow-x-auto break-normal flex gap-1 items-center">
-          <div className="w-3 h-3 rounded-full bg-green-400" />
+        <div className="flex items-center gap-1 overflow-x-auto break-normal">
+          <div className="size-3 rounded-full bg-green-400" />
           {data.status}
         </div>
         <span className="font-semibold">Agent Service Address:</span>
@@ -67,8 +66,8 @@ const NodeCard = React.forwardRef<
   }
   return (
     <div
+      className={clsx('rounded-2xl bg-[#E4F6F2] p-3', className)}
       ref={ref}
-      className={clsx('bg-[#E4F6F2] rounded-2xl p-3', className)}
       {...props}
     >
       <span className="font-semibold">Node ID:</span>

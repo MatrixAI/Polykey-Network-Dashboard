@@ -1,4 +1,4 @@
-import type { AuditMetric } from 'polykey/dist/audit/types';
+import type { AuditMetric } from 'polykey/audit/types.js';
 
 type IpGeo = {
   range: Array<number>;

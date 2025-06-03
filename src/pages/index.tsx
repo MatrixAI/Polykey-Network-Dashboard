@@ -1,4 +1,4 @@
-import type { IpGeo, SeednodesStatusGetResult } from '../types';
+import type { IpGeo, SeednodesStatusGetResult } from '../types.js';
 import * as React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
@@ -8,7 +8,7 @@ import Map from '../components/Map';
 import SeedNodeCard from '../components/SeedNodeCard';
 import ResourceChart from '../components/ResourceChart';
 
-export default function Home(): JSX.Element {
+const Home = () => {
   const { siteConfig } = useDocusaurusContext();
   const nodesGeoQuery = useQuery<{ [nodeId: string]: IpGeo }>({
     queryKey: ['nodesGeo'],
@@ -54,114 +54,110 @@ export default function Home(): JSX.Element {
     queryFn: () =>
       fetch(`${siteConfig.url}/api/deployments`).then(async (response) => {
         const resp = await utils.unwrapJson(response);
-        if (Array.isArray(resp)) {
-          resp.length = 5;
-        }
-        return resp;
+        return Array.isArray(resp) ? resp.slice(0, 5) : [];
       }),
     refetchInterval: 60 * 1000,
   });
 
-  const versionMetadataKeys = deploymentsQuery.data?.reduce(
-    (acc, deployment) => {
-      for (const key of Object.keys(deployment.versionMetadata)) {
-        acc.add(key);
-      }
-      return acc;
-    },
-    new Set<string>(),
-  );
-  const versionMetadataKeysSorted =
-    versionMetadataKeys != null ? [...versionMetadataKeys].sort() : undefined;
+  const preferredOrder = [
+    'commitHash',
+    'version',
+    'libVersion',
+    'libSourceVersion',
+    'libStateVersion',
+    'libNetworkVersion',
+  ];
+
+  const versionMetadataLabels: Record<string, string> = {
+    version: 'Version',
+    commitHash: 'Commit',
+    libVersion: 'LibVersion',
+    libStateVersion: 'StateVer',
+    libSourceVersion: 'LibSrcVer',
+    libNetworkVersion: 'NetVer',
+  };
+
   return (
     <Layout
-      title={`${siteConfig.title}`}
       description="Polykey, a new approach to secrets management."
+      title={`${siteConfig.title}`}
     >
       <div>
         <div className="bg-[#116466]">
-          <div className="max-w-4xl mx-auto">
+          <div className="mx-auto max-w-4xl">
             <div className="px-3 py-6">
               <Map nodesGeo={nodesGeoQuery.data} />
             </div>
           </div>
         </div>
-        <div className="max-w-6xl mx-auto p-3 space-y-3">
-          <h1 className="text-2xl text-center">Seed Nodes</h1>
+        <div className="mx-auto max-w-6xl space-y-3 p-3">
+          <h1 className="text-center text-2xl">Seed Nodes</h1>
           <div className="flex flex-wrap justify-center gap-3">
-            {seedNodesQuery.data != null ? (
-              Object.entries(seedNodesQuery.data).map(([nodeId, data]) => (
-                <SeedNodeCard
-                  key={nodeId}
-                  className="flex-grow-[0.5] flex-shrink min-w-0"
-                  nodeId={nodeId}
-                  data={data}
-                />
-              ))
-            ) : (
-              <></>
-            )}
+            {seedNodesQuery.data != null
+              ? Object.entries(seedNodesQuery.data).map(([nodeId, data]) => (
+                  <SeedNodeCard
+                    className="min-w-0 shrink grow-[0.5]"
+                    data={data}
+                    key={nodeId}
+                    nodeId={nodeId}
+                  />
+                ))
+              : null}
             {seedNodesQuery.error != null ? (
               <>Unable to fetch seednodes status from Polykey-Network-Status</>
-            ) : (
-              <></>
-            )}
+            ) : null}
           </div>
           {resourceCpuQuery.error == null ||
           resourceMemoryQuery.error == null ? (
-            <div className="bg-[#E4F6F2] rounded-2xl p-3">
-              <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
+            <div className="rounded-2xl bg-[#E4F6F2] p-3">
+              <div className="inline-block aspect-[1.5] w-full md:w-1/2">
                 {resourceCpuQuery.data != null ? (
                   <ResourceChart
-                    title="CPU Usage"
                     data={utils.filterByKey(
                       resourceCpuQuery.data,
                       Object.keys(seedNodesQuery.data ?? []),
                     )}
+                    title="CPU Usage"
                   />
-                ) : (
-                  <></>
-                )}
+                ) : null}
               </div>
-              <div className="w-full md:w-1/2 inline-block aspect-[1.5]">
+              <div className="inline-block aspect-[1.5] w-full md:w-1/2">
                 {resourceMemoryQuery.data != null ? (
                   <ResourceChart
-                    title="Memory Usage"
                     data={utils.filterByKey(
                       resourceMemoryQuery.data,
                       Object.keys(seedNodesQuery.data ?? []),
                     )}
+                    title="Memory Usage"
                   />
-                ) : (
-                  <></>
-                )}
+                ) : null}
               </div>
             </div>
-          ) : (
-            <></>
-          )}
-          <div className="bg-[#E4F6F2] rounded-2xl p-3">
+          ) : null}
+          <div className="rounded-2xl bg-[#E4F6F2] p-3">
             <span className="font-semibold">Deployments:</span>
-            <table className="w-full mt-3">
-              <tbody className="w-full table">
+            <table className="mt-3 w-full table-auto">
+              <thead>
                 <tr>
                   <th>ID</th>
-                  {(versionMetadataKeysSorted ?? []).map((key) => (
-                    <th key={key}>{key}</th>
+                  {preferredOrder.map((key) => (
+                    <th key={key}>{versionMetadataLabels[key] ?? key}</th>
                   ))}
                   <th>Started On</th>
                   <th>Finished On</th>
                   <th>Progress</th>
                 </tr>
+              </thead>
+              <tbody>
                 {deploymentsQuery.isLoading ? (
                   <tr>
-                    <td colSpan={5} align="center">
+                    <td align="center" colSpan={5}>
                       Loading Deployments
                     </td>
                   </tr>
                 ) : deploymentsQuery.error != null ? (
                   <tr>
-                    <td colSpan={5} align="center">
+                    <td align="center" colSpan={5}>
                       Could not fetch deployments from Polykey-Network-Status
                     </td>
                   </tr>
@@ -173,82 +169,86 @@ export default function Home(): JSX.Element {
                     const progress = Math.min(deployment.progress, 1);
                     return (
                       <tr key={deployment.id}>
-                        <>
-                          <td>{deployment.id}</td>
-                          {(versionMetadataKeysSorted ?? []).map((key) => {
-                            const value = deployment.versionMetadata[key];
-                            if (value == null) {
-                              return <td key={key}></td>;
-                            }
-                            switch (key) {
-                              case 'commitHash':
-                                return (
-                                  <td key={key}>
-                                    <a
-                                      title={value}
-                                      href={`https://github.com/MatrixAI/Polykey-CLI/commit/${value}`}
-                                    >
-                                      {value.slice(0, 7)}
-                                    </a>
-                                  </td>
-                                );
-                              default:
-                                return <td key={key}>{value}</td>;
-                            }
-                          })}
-                          <td>
-                            {new Date(deployment.startedOn).toISOString()}
-                          </td>
-                          <td>
-                            {deployment.finishedOn == null
-                              ? ''
-                              : new Date(deployment.finishedOn).toISOString()}
-                          </td>
-                          <td className="text-center">
-                            <div className="relative inline-flex items-center justify-center overflow-hidden rounded-full">
-                              <svg
-                                transform="rotate(-90)"
-                                style={{
-                                  height: `${radius * 2}px`,
-                                  width: `${radius * 2}px`,
-                                }}
-                              >
-                                <circle
-                                  className="text-gray-300"
-                                  strokeWidth={10}
-                                  stroke="currentColor"
-                                  fill="transparent"
-                                  r={radius}
-                                  cx={radius}
-                                  cy={radius}
-                                />
-                                <circle
-                                  className="text-green-400"
-                                  strokeWidth={10}
-                                  strokeDasharray={circumference}
-                                  strokeDashoffset={
-                                    circumference - progress * circumference
-                                  }
-                                  strokeLinecap="round"
-                                  stroke="currentColor"
-                                  fill="transparent"
-                                  r={radius}
-                                  cx={radius}
-                                  cy={radius}
-                                />
-                              </svg>
-                              <span className="absolute">
-                                {progress * 100}%
-                              </span>
-                            </div>
-                          </td>
-                        </>
+                        <td>{deployment.id}</td>
+                        {preferredOrder.map((key) => {
+                          const value = deployment.versionMetadata[key];
+                          if (value == null) {
+                            return <td key={key}></td>;
+                          }
+                          switch (key) {
+                            case 'commitHash':
+                              return (
+                                <td key={key}>
+                                  <a
+                                    href={`https://github.com/MatrixAI/Polykey-CLI/commit/${value}`}
+                                    title={value}
+                                  >
+                                    {value.slice(0, 7)}
+                                  </a>
+                                </td>
+                              );
+                            default:
+                              return <td key={key}>{value}</td>;
+                          }
+                        })}
+                        <td
+                          title={new Date(deployment.startedOn).toISOString()}
+                        >
+                          {new Date(deployment.startedOn).toLocaleString()}
+                        </td>
+                        <td
+                          title={
+                            deployment.finishedOn
+                              ? new Date(deployment.finishedOn).toISOString()
+                              : ''
+                          }
+                        >
+                          {deployment.finishedOn
+                            ? new Date(deployment.startedOn).toLocaleString()
+                            : ''}
+                        </td>
+                        <td className="text-center">
+                          <div className="relative inline-flex items-center justify-center overflow-hidden rounded-full">
+                            <svg
+                              style={{
+                                height: `${radius * 2}px`,
+                                width: `${radius * 2}px`,
+                              }}
+                              transform="rotate(-90)"
+                            >
+                              <circle
+                                className="text-gray-300"
+                                cx={radius}
+                                cy={radius}
+                                fill="transparent"
+                                r={radius}
+                                stroke="currentColor"
+                                strokeWidth={10}
+                              />
+                              <circle
+                                className="text-green-400"
+                                cx={radius}
+                                cy={radius}
+                                fill="transparent"
+                                r={radius}
+                                stroke="currentColor"
+                                strokeDasharray={circumference}
+                                strokeDashoffset={
+                                  circumference - progress * circumference
+                                }
+                                strokeLinecap="round"
+                                strokeWidth={10}
+                              />
+                            </svg>
+                            <span className="absolute">{progress * 100}%</span>
+                          </div>
+                        </td>
                       </tr>
                     );
                   })
                 ) : (
                   <tr>
-                    <td colSpan={5} align="center">
+                    <td align="center" colSpan={5}>
                       No deployments have been recorded
                     </td>
                   </tr>
@@ -260,4 +260,6 @@ export default function Home(): JSX.Element {
       </div>
     </Layout>
   );
-}
+};
+
+export default Home;

@@ -15,7 +15,7 @@
         shell = { ci ? false }:
           with pkgs;
           mkShell {
-            nativeBuildInputs = [ nodejs shellcheck git-lfs ];
+            nativeBuildInputs = [ nodejs_20 shellcheck git-lfs ];
             shellHook = ''
               echo "Entering $(npm pkg get name)"
               set -o allexport
