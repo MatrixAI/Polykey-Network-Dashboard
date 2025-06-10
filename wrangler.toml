@@ -11,11 +11,11 @@ routes = [
 [env.staging]
   name = "polykey-network-dashboard-staging"
   routes = [
-    { pattern = "testnet.polykey.com/*", custom_domain = true },
+    { pattern = "testnet.polykey.com", custom_domain = true },
   ]
 
 [env.master]
   name = "polykey-network-dashboard"
   routes = [
-    { pattern = "mainnet.polykey.com/*", custom_domain = true },
+    { pattern = "mainnet.polykey.com", custom_domain = true },
   ]
