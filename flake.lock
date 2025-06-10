@@ -38,17 +38,17 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1736139540,
-        "narHash": "sha256-39Iclrd+9tPLmvuFVyoG63WnHZJ9kCOC6eRytRYLAWw=",
+        "lastModified": 1748319691,
+        "narHash": "sha256-LD/Ay+YGSuQMinAee0qfRdP3zSot7F7PTL5tNT7h1sk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8ab83a21276434aaf44969b8dd0bc0e65b97a240",
+        "rev": "5bd1c9f85ad8ea7aee256d785f9455ee106a0348",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8ab83a21276434aaf44969b8dd0bc0e65b97a240",
+        "rev": "5bd1c9f85ad8ea7aee256d785f9455ee106a0348",
         "type": "github"
       }
     },
@@ -57,11 +57,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1736140072,
-        "narHash": "sha256-MgtcAA+xPldS0WlV16TjJ0qgFzGvKuGM9p+nPUxpUoA=",
+        "lastModified": 1749180974,
+        "narHash": "sha256-ODSVHi4h559niuSMYhEtJTLr11sSEimy47wy5QytYRg=",
         "owner": "MatrixAI",
         "repo": "nixpkgs-matrix",
-        "rev": "029084026bc4a35bce81bac898aa695f41993e18",
+        "rev": "633623bc6bedf685b85e8ca0a0663dbfaa01431b",
         "type": "github"
       },
       "original": {
@@ -75,11 +75,11 @@
         "polykey-cli": "polykey-cli"
       },
       "locked": {
-        "lastModified": 1738710187,
-        "narHash": "sha256-t1O8bhr7SF+mwmXDWIfJFJWfi/7GHrD3YGYhSu9cp0A=",
+        "lastModified": 1749181006,
+        "narHash": "sha256-OU/1gjQ36uWHf3z39JmWuRMhDbTg7M68trHJ/GwA6ys=",
         "owner": "MatrixAI",
         "repo": "nixpkgs-matrix-private",
-        "rev": "9375c4d760d9b2ae6aebba2efeda7fb0f4f61618",
+        "rev": "57b79406c3527610d4a8ca099b0810d653e6609b",
         "type": "github"
       },
       "original": {
@@ -126,11 +126,11 @@
         "nixpkgs-matrix": "nixpkgs-matrix_2"
       },
       "locked": {
-        "lastModified": 1736128284,
-        "narHash": "sha256-bdW4EvFiSC+7Io9HsX2+qfniJrIiVHE96avTkHw9RoE=",
+        "lastModified": 1748504061,
+        "narHash": "sha256-Wicg9DaoWZETOBHh1l5oe9jzyqfPqW9wwk6LynJsTzc=",
         "owner": "MatrixAI",
         "repo": "Polykey-CLI",
-        "rev": "8981bd48ce2db238b1adcfee69aa5552ecff78fb",
+        "rev": "9ae7ac17a272c06cad53351384b9589b08e6164e",
         "type": "github"
       },
       "original": {

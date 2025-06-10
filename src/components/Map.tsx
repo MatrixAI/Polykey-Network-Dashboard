@@ -1,4 +1,4 @@
-import type { IpGeo } from '../types';
+import type { IpGeo } from '../types.js';
 import * as React from 'react';
 
 interface LatLng {
@@ -16,7 +16,6 @@ const Map = React.forwardRef<
     nodesGeo?: { [nodeId: string]: IpGeo };
   }
   // Complains about props not being validated
-  // eslint-disable-next-line
 >(({ className, nodesGeo, ...props }, ref) => {
   const [width, setWidth] = React.useState<number>(0);
 
@@ -120,7 +119,11 @@ const Map = React.forwardRef<
   return (
     <div className={className} ref={ref} {...props}>
       <div className="relative">
-        <img src="images/map.svg" className="w-full text-white" />
+        <img
+          alt="Polykey Node Map"
+          className="w-full text-white"
+          src="images/map.svg"
+        />
         {/* <div
           className="absolute"
           style={{
@@ -132,55 +135,54 @@ const Map = React.forwardRef<
             Japan
           </div>
         </div> */}
-        {nodesGeo != null ? (
-          clusterPoints(
-            Object.values(nodesGeo).map((geo) => ({
-              lat: geo.ll[0],
-              lng: geo.ll[1],
-            })),
-            1000,
-          ).map(({ count, lat, lng }, i) => {
-            const { x, y } = latLonToOffsets(lat * 1.8, lng, 100, 100);
-            return (
-              <div
-                key={i}
-                className="aspect-square border-[rgba(255, 255, 255, 0.4)] border rounded-full absolute grid place-items-center -translate-x-1/2 -translate-y-1/2"
-                style={{
-                  left: `${x > 0 ? x : 100 + x}%`,
-                  top: `${y}%`,
-                  transformOrigin: 'top left',
-                  width: `${
-                    Math.max(Math.min(Math.log(count * 1000), 15), 1) +
-                    (width > 640 ? 0 : 4)
-                  }%`,
-                }}
-              >
-                <div className="aspect-square bg-white w-[75%] rounded-full flex justify-center">
-                  <img
-                    src="images/polykey-logomark-dark.svg"
-                    className="w-[60%]"
-                  />
-                </div>
+        {nodesGeo != null
+          ? clusterPoints(
+              Object.values(nodesGeo).map((geo) => ({
+                lat: geo.ll[0],
+                lng: geo.ll[1],
+              })),
+              1000,
+            ).map(({ count, lat, lng }, i) => {
+              const { x, y } = latLonToOffsets(lat * 1.8, lng, 100, 100);
+              return (
                 <div
-                  className="
-                  absolute bottom-0 right-0
-                  rounded-full
-                  aspect-square w-6 leading-5
-                  bg-[#134647] border-[#289295]
-                  border-2 text-center
-                  text-xs
-                  text-white
-                  inline-block
-                  align-middle"
+                  className="absolute grid aspect-square -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-[rgba(255,255,255)]"
+                  key={i}
+                  style={{
+                    left: `${x > 0 ? x : 100 + x}%`,
+                    top: `${y}%`,
+                    transformOrigin: 'top left',
+                    width: `${
+                      Math.max(Math.min(Math.log(count * 1000), 15), 1) +
+                      (width > 640 ? 0 : 4)
+                    }%`,
+                  }}
                 >
-                  {count}
+                  <div className="flex aspect-square w-3/4 justify-center rounded-full bg-white">
+                    <img
+                      alt="Polykey Logo"
+                      className="w-3/5"
+                      src="images/polykey-logomark-dark.svg"
+                    />
+                  </div>
+                  <div
+                    className="
+                  absolute bottom-0 right-0
+                  inline-block
+                  aspect-square w-6 rounded-full
+                  border-2 border-[#289295]
+                  bg-[#134647] text-center
+                  align-middle
+                  text-xs
+                  leading-5
+                  text-white"
+                  >
+                    {count}
+                  </div>
                 </div>
-              </div>
-            );
-          })
-        ) : (
-          <></>
-        )}
+              );
+            })
+          : null}
       </div>
     </div>
   );

@@ -1,62 +1,44 @@
 {
   "name": "polykey-network-dashboard",
   "private": true,
-  "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "scripts": {
-    "lint": "eslint '{src,api,pages,blog,scripts}/**/*.{js,ts,jsx,tsx,json}' 'docusaurus.config.ts'",
-    "lintfix": "eslint '{src,api,pages,blog,scripts}/**/*.{js,ts,jsx,tsx,json}' 'docusaurus.config.ts' --fix",
+    "lint": "matrixai-lint --shell src",
+    "lintfix": "matrixai-lint --fix --shell src",
     "start": "docusaurus start",
     "swizzle": "docusaurus swizzle",
     "build": "docusaurus build --out-dir=./public",
-    "deploy": "node ./scripts/deploy.js"
-  },
-  "devDependencies": {
-    "@cloudflare/workers-types": "^4.20230228.0",
-    "@docusaurus/core": "^3.0.0",
-    "@docusaurus/module-type-aliases": "^3.0.0",
-    "@docusaurus/preset-classic": "^3.0.0",
-    "@docusaurus/theme-common": "^3.0.0",
-    "@mdx-js/react": "^3.0.0",
-    "@tsconfig/docusaurus": "^1.0.5",
-    "@typescript-eslint/eslint-plugin": "^6.9.1",
-    "@typescript-eslint/parser": "^6.9.1",
-    "clsx": "^1.2.1",
-    "eslint": "^8.44.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^5.0.0-alpha.2",
-    "polykey": "^1.2.1-alpha.39",
-    "postcss": "^8.4.31",
-    "prettier": "^3.0.0",
-    "prism-react-renderer": "^2.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "tailwindcss": "^3.3.5",
-    "typescript": "^5.1.6",
-    "unist-util-visit": "^5.0.0",
-    "wrangler": "^3.17.1"
-  },
-  "engines": {
-    "node": ">=18.0"
+    "deploy": "node ./scripts/deploy.mjs"
   },
   "dependencies": {
-    "@docusaurus/plugin-client-redirects": "^3.0.1",
-    "@tanstack/react-query": "^5.14.2",
-    "chart.js": "^4.4.1",
+    "@apidevtools/json-schema-ref-parser": "^13.0.4",
+    "@docusaurus/plugin-client-redirects": "^3.8.1",
+    "@iarna/toml": "^2.2.5",
+    "@tanstack/react-query": "^5.80.6",
+    "chart.js": "^4.4.9",
     "chartjs-adapter-date-fns": "^3.0.0",
-    "chartjs-plugin-zoom": "^2.0.1",
-    "date-fns": "^3.0.1",
-    "react-chartjs-2": "^5.2.0"
+    "chartjs-plugin-zoom": "^2.2.0",
+    "date-fns": "^4.1.0",
+    "react-chartjs-2": "^5.3.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250610.0",
+    "@docusaurus/core": "^3.8.1",
+    "@docusaurus/module-type-aliases": "^3.8.1",
+    "@docusaurus/preset-classic": "^3.8.1",
+    "@docusaurus/theme-common": "^3.8.1",
+    "@matrixai/lint": "^0.2.12",
+    "@mdx-js/react": "^3.1.0",
+    "@tsconfig/docusaurus": "^2.0.3",
+    "clsx": "^2.1.1",
+    "polykey": "^2.3.4",
+    "postcss": "^8.5.4",
+    "prettier": "^3.5.3",
+    "prism-react-renderer": "^2.4.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3",
+    "unist-util-visit": "^5.0.0",
+    "wrangler": "^4.19.1"
   }
 }

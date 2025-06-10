@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from './SearchBar.module.css';
 
-export default function FooterLayout(): JSX.Element {
+const FooterLayout = () => {
   return <p className={styles.helpme}></p>;
-}
+};
+
+export default FooterLayout;
