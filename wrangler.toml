@@ -3,7 +3,7 @@ main = "src/worker.ts"
 send_metrics = false
 compatibility_date = "2024-09-23"
 routes = [
-  { pattern = "dev.testnet.polykey.com", custom_domain = true },
+  { pattern = "dev.testnet.polykey.com", custom_domain = false },
 ]
 [site]
   bucket = "./public"
@@ -11,11 +11,11 @@ routes = [
 [env.staging]
   name = "polykey-network-dashboard-staging"
   routes = [
-    { pattern = "testnet.polykey.com", custom_domain = true },
+    { pattern = "testnet.polykey.com", custom_domain = false },
   ]
 
 [env.master]
   name = "polykey-network-dashboard"
   routes = [
-    { pattern = "mainnet.polykey.com", custom_domain = true },
+    { pattern = "mainnet.polykey.com", custom_domain = false },
   ]
